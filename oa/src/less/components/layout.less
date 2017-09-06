@@ -1,0 +1,81 @@
+.moment{
+  border: 1px solid @color-border;
+  background: @color-bg;
+  .moment-header{
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    background: @color-content;
+    position: relative;
+    padding: 0 20px;
+    .header-logo{
+      width: 100px;
+      height: 30px;
+      border-radius: 3px;
+      float: left;
+      line-height: 30px;
+      font-size: 20px;
+      margin: 15px 0;
+      color: @color-white;
+    }
+    .header-handle{
+      display: flex;
+      margin: 10px 0;
+      .header-head{
+        margin-right: 10px;
+        img{
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+      }
+      .header-info{
+        .header-info-name{
+          line-height: 20px;
+          font-size: 15px;
+          color: @color-white;
+        }
+        .header-info-handle{
+          font-size: 12px;
+          line-height: 20px;
+          color: @color-sub;
+          a{
+            color: @color-light;
+          }
+        }
+      }
+    }
+  }
+  .moment-footer{
+    text-align: center;
+    padding: 10px 0 20px;
+    color: @color-disabled;
+  }
+  .moment-body{
+    min-height: 200px;
+    margin: 15px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+  }
+}
+
+.login{
+  background: url('/dist/img/bg.jpg');
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .login-card{
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    .login-card-head{
+      text-align: center;
+      font-size: 20px;
+      line-height: 40px;
+      font-weight: normal;
+    }
+  }
+}
