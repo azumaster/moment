@@ -18,16 +18,15 @@
 </template>
 
 <script>
+    import crypto from 'crypto';
+
     export default {
         name: 'login',
         // 数据
         data: function () {
             const validateMobile = function(rule, value, callback){
                 if(value == '') callback(new Error('手机号码不能为空~'));
-                else {
-                    if(!(/^1[34578]\d{9}$/.test(value))) callback(new Error('手机号码格式错误~'));
-                    else callback();
-                }
+                else {if(!(/^1[34578]\d{9}$/.test(value))) callback(new Error('手机号码格式错误~')); else callback();}
             };
 
             return {
@@ -45,17 +44,25 @@
             doLogin: function () {
                 let mobile = this.loginForm.userMobile,
                     pwd = this.loginForm.userPwd;
+                let _this = this;
 
-                console.log(mobile, pwd);
+                pwd = crypto.createHmac('sha1', 'azumar').update(pwd).digest().toString('base64');
+
+                this.$Loading.start();
                 this.$ajax({
                     method: 'post',
-                    url: '/user/register',
+                    url: '/user/login',
                     data: {mobile: mobile, pwd: pwd}
                 }).then(function (res) {
-                    console.log(res);
-                })
-                .catch(function (error) {
-                    console.log(error);
+                    if(res.data.code == 0){
+                        _this.$store.state.isLogin = true;
+                    }else{
+                        _this.$Message.error(res.data.message);
+                    }
+                    _this.$Loading.finish();
+                }).catch(function () {
+                    _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                    _this.$Loading.error();
                 });
             }
         },

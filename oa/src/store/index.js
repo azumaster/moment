@@ -4,8 +4,13 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  state: {
-    page: 1
-  }
+    state: {
+        isLogin: false
+    },
+    mutations: {
+        login(state){
+            state.isLogin = true;
+        }
+    }
 });
 export default store;
