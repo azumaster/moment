@@ -7,7 +7,7 @@
                     <Input type="text" v-model="loginForm.userMobile" size="large" icon="android-phone-portrait" placeholder="请输入手机号码"/>
                 </FormItem>
                 <FormItem label="密码">
-                    <Input type="password" v-model="loginForm.userPwd" size="large" icon="locked" placeholder="请输入密码" />
+                    <Input :type="pwdType" @on-click="checkPwd" @on-enter="doLogin" v-model="loginForm.userPwd" size="large" icon="locked" placeholder="请输入密码" />
                 </FormItem>
                 <FormItem>
                     <Button size="large" type="primary" @click="doLogin" long>登录</Button>
@@ -36,7 +36,8 @@
                 },
                 ruleLogin: {
                     userMobile: [{validator: validateMobile, trigger: 'blur'}]
-                }
+                },
+                pwdType: 'password'
             };
         },
         methods: {
@@ -56,6 +57,7 @@
                 }).then(function (res) {
                     if(res.data.code == 0){
                         _this.$store.state.isLogin = true;
+                        _this.$store.state.user = res.data.data;
                     }else{
                         _this.$Message.error(res.data.message);
                     }
@@ -64,6 +66,10 @@
                     _this.$Message.error('小Mo开小差去了，请稍后再试~');
                     _this.$Loading.error();
                 });
+            },
+            // 切换密码显示
+            checkPwd: function () {
+                this.pwdType = this.pwdType == 'text'?'password':'text';
             }
         },
         // 生命周期

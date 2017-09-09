@@ -14,10 +14,9 @@
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.2.1",
+    "koa-session": "^5.5.0",
     "koa-static": "^4.0.1",
     "mongoose": "^4.11.10"
   },
-  "dependencies": {
-    "koa-session": "^5.5.0"
-  }
+  "dependencies": {}
 }

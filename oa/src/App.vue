@@ -16,6 +16,30 @@
                 isLogin: false
             };
         },
+        methods: {
+            // 获取登录情况
+            getLogin: function () {
+                let _this = this;
+
+                this.$Loading.start();
+                this.$ajax({
+                    method: 'get',
+                    url: '/user/getLogin'
+                }).then(function (res) {
+                    if(res.data.code == 0){
+                        _this.isLogin = true;
+                        _this.$store.state.user = res.data.data;
+                    }
+                    _this.$Loading.finish();
+                }).catch(function () {
+                    _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                    _this.$Loading.error();
+                });
+            }
+        },
+        created: function () {
+            this.getLogin();
+        },
         /**
          * 监听vuex的store中的state,需要通过computed生命周期获取到state的值
          * 再通过watch去改变vue组件中的data的值

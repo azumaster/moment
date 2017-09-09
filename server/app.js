@@ -11,7 +11,7 @@ const config = require('./common/config.js');
 const controllers = require('./controllers.js');
 
 const app = new koa();
-
+app.keys = ['azumar'];
 app.use(koaStatic(__dirname, {extensions: ['html']}));
 app.use(bodyParser());
 app.use(session(config.session, app));
