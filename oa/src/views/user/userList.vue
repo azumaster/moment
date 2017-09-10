@@ -1,6 +1,13 @@
 <template>
-    <div class="page-table">
-        <Table :columns="userColumn" :data="userList"></Table>
+    <div id="userList">
+        <div class="page-header">
+            <Button type="primary" size="large" icon="ios-plus-outline" @click="showAdd = true">添加新用户</Button>
+        </div>
+        <div class="page-table">
+            <Table border :columns="userColumn" :data="userList"></Table>
+            <Page class="page-paging" :total="100"></Page>
+        </div>
+        <Modal v-model="showAdd" title="添加新用户">ljl</Modal>
     </div>
 </template>
 
@@ -9,8 +16,32 @@
         name: 'userList',
         data () {
             return {
-                userColumn: [{title: '姓名', key: 'name'}, {title: '年龄', key: 'age'}, {title: '地址', key: 'address'}],
-                userList: []
+                userColumn: [{title: '姓名', key: 'userName'}, {title: '注册手机号码', key: 'userMobile'}, {title: '角色', key: 'userType'},
+                    {title: '创建时间', key: 'createdAt'}, {title: '操作', key: 'action',
+                        render: (h) => {
+                            return h('div', [
+                                h('Button', { props: { type: 'text', size: 'small'},
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+//                                            this.show(params.index)
+                                        }
+                                    }
+                                }, '修改'),
+                                h('Button', {
+                                    props: { type: 'text', size: 'small'},
+                                    on: {
+                                        click: () => {
+//                                            this.remove(params.index)
+                                        }
+                                    }
+                                }, '拉黑')
+                            ]);
+                        }}],
+                userList: [],
+                showAdd: false
             };
         },
         methods: {

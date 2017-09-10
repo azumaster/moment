@@ -2,15 +2,23 @@ const common = require('./../common/common.js');
 const User = require('./../schema/user.js');
 
 // 获取用户列表
-let getUserList = (ctx, next) => {
+let getUserList = async (ctx, next) => {
 
-    User.find({}, (err, res)=>{
-        if(err) {
-            ctx.response.body = { code: 103, message: err};
-        } else {
-            ctx.response.body = { code: 0, message: '登录成功', data: {}};
-        }
+    let response = await new Promise((resolve, reject)=>{
+        User.find({}, (err, res)=>{
+            if(err){
+                reject({code: 102, message: err});
+            }else{
+                let userList = [];
+                res.map((user)=>{
+                    userList.push({userId: user._id, userName: user.userName, userMobile: user.userMobile, userType: user.userType, createdAt: user.createdAt, userHead: user.userHead})
+                });
+
+                resolve({code: 0, message: '', data: {list: userList}})
+            }
+        });
     });
+    ctx.response.body = response;
 };
 
 module.exports = {

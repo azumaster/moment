@@ -10,6 +10,7 @@
                 </MenuGroup>
                 <MenuGroup title="文章管理">
                     <MenuItem name="blogList"><Icon type="document-text"></Icon>文章列表</MenuItem>
+                    <MenuItem name="blogType"><Icon type="document-text"></Icon>文章分类列表</MenuItem>
                     <MenuItem name="blogComment"><Icon type="android-textsms"></Icon>评论列表</MenuItem>
                 </MenuGroup>
             </Menu>
