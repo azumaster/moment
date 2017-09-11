@@ -34,7 +34,7 @@ let login = async (ctx, next) => {
                 ctx.response.body = { code: 103, message: err};
                 reject(err);
             } else {
-                if(res[0].userMobile){
+                if(res[0]){
                     let user = {
                         userId: res[0]._id,
                         userName: common.unary(res[0].userName, res[0].userMobile),
