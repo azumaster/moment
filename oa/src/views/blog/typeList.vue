@@ -42,7 +42,7 @@
                             h('Button', { props: { type: 'primary', shape:'circle', icon: 'edit'}, style: { marginRight: '5px' }, on: { click: () => { this.showEditType(params.index);}}}),
                             h('Button', { props: { type: 'error', shape:'circle', icon: 'ios-trash'}, style: { marginRight: '5px' },
                                 on: { click: () => {
-//                                            this.show(params.index)
+//                                            this.show(params.blogList)
                                 }
                                 }
                             })

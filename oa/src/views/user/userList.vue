@@ -26,7 +26,7 @@
                                     },
                                     on: {
                                         click: () => {
-//                                            this.show(params.index)
+//                                            this.show(params.blogList)
                                         }
                                     }
                                 }, '修改'),
@@ -34,7 +34,7 @@
                                     props: { type: 'text', size: 'small'},
                                     on: {
                                         click: () => {
-//                                            this.remove(params.index)
+//                                            this.remove(params.blogList)
                                         }
                                     }
                                 }, '拉黑')

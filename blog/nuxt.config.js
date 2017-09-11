@@ -31,5 +31,8 @@ module.exports = {
         })
       }
     }
-  }
-}
+  },
+  css: [
+    {src: './assets/less/style.less', lang: 'style-loader!css-loader!autoprefixer-loader!less-loader'}
+  ]
+};
