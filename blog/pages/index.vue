@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import Header from './../components/home/header.vue'
-import BlogInfo from './../components/home/blogInfo.vue'
-import BlogAbout from './../components/home/blogAbout.vue'
+  import Header from './../components/home/header.vue'
+  import BlogInfo from './../components/home/blogInfo.vue'
+  import BlogAbout from './../components/home/blogAbout.vue'
 
-export default {
-  components: { Header, BlogInfo, BlogAbout }
-}
+  export default {
+    components: { Header, BlogInfo, BlogAbout }
+  }
 </script>

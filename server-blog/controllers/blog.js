@@ -29,7 +29,6 @@ let getTypeList = async (ctx, next) => {
             if(err){
                 reject({code: 102, message: err});
             }else{
-                
                 resolve({code: 0, message: '', data: res});
             }
         });
