@@ -30,7 +30,8 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    vendor: ['axios']
   },
   css: [
     {src: './assets/less/style.less', lang: 'style-loader!css-loader!autoprefixer-loader!less-loader'}

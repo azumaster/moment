@@ -1,5 +1,3 @@
-const Common = require('./../common/common.js');
-
 const Type = require('./../schema/type.js');
 const Blog = require('./../schema/blog.js');
 
@@ -31,7 +29,6 @@ let getTypeList = async (ctx, next) => {
             if(err){
                 reject({code: 102, message: err});
             }else{
-                
                 resolve({code: 0, message: '', data: res});
             }
         });
@@ -114,15 +111,14 @@ let getBlogList = async (ctx, next)=>{
                 }else{
                     let blogList = [];
                     res.map((blog)=>{
-                        console.log(blog.user);
                         blogList.push({
                             _id: blog._id,
                             blogTitle: blog.blogTitle,
                             blogContent: blog.blogContent,
-                            createdAt: Common.getDateTime(blog.createdAt),
-                            updatedAt: Common.getDateTime(blog.updatedAt),
+                            createdAt: blog.createdAt,
+                            updatedAt: blog.updatedAt,
                             blogType: blog.type.typeName,
-                            author: {name: blog.user.userName, head: blog.user.userHead}
+                            author: blog.user.userName
                         });
                     });
                     resolve({code: 0, message: '', data: {current: page, blogList: blogList}});
