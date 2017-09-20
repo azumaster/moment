@@ -22,7 +22,7 @@
                 params: {page: 1, size: 20},
                 paging: {current: 1, total: 0},
                 blogList: [],
-                blogColumns: [{title: '文章标题', key: 'blogTitle'}, {title: '文章作者', key: 'author'}, {title: '文章分类', key: 'blogType'}, {title: '最后更新时间', key: 'updatedAt'}]
+                blogColumns: [{title: '文章标题', key: 'blogTitle'}, {title: '文章作者', key: 'authorName'}, {title: '文章分类', key: 'blogType'}, {title: '最后更新时间', key: 'updatedAt'}]
             };
         },
         methods: {
@@ -37,7 +37,12 @@
                     params: _this.params
                 }).then(function (res) {
                     if(res.data.code == 0){
-                        _this.blogList = res.data.data.blogList;
+                        let blogList = res.data.data.blogList;
+                        res.data.data.blogList.map((blog)=>{
+                           blog.authorName = blog.author.name;
+                        });
+
+                        _this.blogList = blogList;
                         _this.paging.current = res.data.data.current;
                         _this.paging.total = res.data.data.total;
                         _this.$Loading.finish();

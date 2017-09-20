@@ -1,3 +1,5 @@
+const Common = require('./../common/common.js');
+
 const Type = require('./../schema/type.js');
 const Blog = require('./../schema/blog.js');
 
@@ -111,14 +113,15 @@ let getBlogList = async (ctx, next)=>{
                 }else{
                     let blogList = [];
                     res.map((blog)=>{
+                        console.log(blog.user);
                         blogList.push({
                             _id: blog._id,
                             blogTitle: blog.blogTitle,
                             blogContent: blog.blogContent,
-                            createdAt: blog.createdAt,
-                            updatedAt: blog.updatedAt,
+                            createdAt: Common.getDateTime(blog.createdAt),
+                            updatedAt: Common.getDateTime(blog.updatedAt),
                             blogType: blog.type.typeName,
-                            author: blog.user.userName
+                            author: {name: blog.user.userName, head: blog.user.userHead}
                         });
                     });
                     resolve({code: 0, message: '', data: {current: page, blogList: blogList}});
