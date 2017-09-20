@@ -123,16 +123,18 @@
     .info-list{
       padding: 5px 0 10px 0;
       .info-list-item{
-        cursor: pointer;
         margin-left: 20px;
         font-size: 13px;
         color: #666666;
         line-height: 25px;
+        &.can-click{
+          cursor: pointer;
+          &:hover{
+            color: #5cadff;
+          }
+        }
         .icon{
           float: right;
-        }
-        &:hover{
-          color: #5cadff;
         }
         &:not(:last-child){
           border-bottom: 1px solid #eeeeee;

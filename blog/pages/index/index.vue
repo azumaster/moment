@@ -8,7 +8,7 @@
         </div>
         <div class="blog-extra">
           <div class="extra-item"><p class="icon clock"></p><p>2017.09.11</p></div>
-          <div class="extra-item"><p class="icon comment"></p><p>18</p></div>
+          <!--<div class="extra-item"><p class="icon comment"></p><p>18</p></div>-->
           <div class="extra-item"><p class="icon category"></p><p>分类1</p></div>
         </div>
       </div>
@@ -24,3 +24,9 @@
     <div class="blog-loading">点击加载更多</div>
   </div>
 </template>
+
+<script>
+  export default {
+    name: 'blogList'
+  }
+</script>

@@ -31,8 +31,18 @@ let getTypeList = async (ctx, next) => {
             if(err){
                 reject({code: 102, message: err});
             }else{
-                
-                resolve({code: 0, message: '', data: res});
+                let typeList = [];
+                res.map((type)=>{
+                   typeList.push({
+                       name: type.typeName,
+                       des: type.typeDes,
+                       _id: type._id,
+                       createdAt: Common.getDateTime(type.createdAt),
+                       updatedAt: Common.getDateTime(type.updatedAt)
+                   });
+                });
+
+                resolve({code: 0, message: '', data: typeList});
             }
         });
     });
@@ -106,7 +116,6 @@ let getBlogList = async (ctx, next)=>{
         skip = size*(page-1);
 
     let blogList = await new Promise((resolve, reject)=>{
-        // Blog.find({}, null, {skip: skip, limit: size}).
         Blog.find({}, null, {skip: skip, limit: size})
             .populate('user').populate('type').exec(function(err, res){
                 if(err){
