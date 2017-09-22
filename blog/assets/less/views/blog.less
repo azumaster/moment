@@ -18,6 +18,9 @@
 .blog-item{
   display: flex;
   justify-content: space-between;
+  &:not(:last-child){
+    margin-bottom: 30px;
+  }
   .blog-author{
     flex:2;
     margin-right: 10px;
@@ -100,7 +103,7 @@
   text-align: center;
   line-height: 30px;
   float: right;
-  margin-top: 30px;
+  margin: 30px 0 50px 0;
   cursor: pointer;
   &:active{
     background: #cccccc;

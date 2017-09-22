@@ -22,7 +22,14 @@
                 params: {page: 1, size: 20},
                 paging: {current: 1, total: 0},
                 blogList: [],
-                blogColumns: [{title: '文章标题', key: 'blogTitle'}, {title: '文章作者', key: 'authorName'}, {title: '文章分类', key: 'blogType'}, {title: '最后更新时间', key: 'updatedAt'}]
+                blogColumns: [{title: '文章标题', key: 'blogTitle'}, {title: '文章作者', key: 'authorName'},
+                    {title: '文章分类', key: 'blogType'}, {title: '最后更新时间', key: 'updatedAt'}, {title: '操作', key: 'action',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', { props: { type: 'primary', shape:'circle', icon: 'edit'}, style: { marginRight: '5px' }, on: { click: () => { this.edit(params.index); }}})
+                            ]);
+                        }
+                    }]
             };
         },
         methods: {
@@ -60,6 +67,8 @@
             changePage: function (page) {
                 this.params.page = page;
                 this.getBlogList();
+            },
+            edit: function () {
             }
         },
         created: function () {

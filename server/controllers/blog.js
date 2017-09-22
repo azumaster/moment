@@ -92,9 +92,10 @@ let addBlog = async (ctx, next) => {
     let title = ctx.request.body.title,
         typeId = ctx.request.body.type,
         content = ctx.request.body.content,
+        des = ctx.request.body.des,
         userId = ctx.session.user.userId;
 
-    let blog = new Blog({blogTitle: title, blogContent: content, user: userId, type: typeId});
+    let blog = new Blog({blogTitle: title, blogContent: content, blogDes: des, user: userId, type: typeId});
 
     let blogRes = await new Promise((resolve, reject)=>{
         blog.save(function (err, res) {
@@ -115,19 +116,25 @@ let getBlogList = async (ctx, next)=>{
         size = parseInt(ctx.query.size),
         skip = size*(page-1);
 
-    let blogList = await new Promise((resolve, reject)=>{
-        Blog.find({}, null, {skip: skip, limit: size})
+    let type = ctx.query.type;
+
+    let blogList = await new Promise((resolve)=>{
+        let where = {};
+        if(type) where.type = type;
+
+        Blog.find(where, null, {skip: skip, limit: size})
+            .sort({createdAt: -1})
             .populate('user').populate('type').exec(function(err, res){
                 if(err){
-                    reject({code: 102, message: err});
+                    resolve({code: 0, message: err.message, data: {current: page, blogList: []}});
                 }else{
                     let blogList = [];
                     res.map((blog)=>{
-                        console.log(blog.user);
                         blogList.push({
                             _id: blog._id,
                             blogTitle: blog.blogTitle,
                             blogContent: blog.blogContent,
+                            blogDes: blog.blogDes,
                             createdAt: Common.getDateTime(blog.createdAt),
                             updatedAt: Common.getDateTime(blog.updatedAt),
                             blogType: blog.type.typeName,
@@ -140,10 +147,14 @@ let getBlogList = async (ctx, next)=>{
     });
     await new Promise((resolve, reject)=>{
         Blog.count({}, function (err, res) {
+            console.log(res);
+
             if(err){
-                reject({code: 102, message: err});
+                resolve({code: 102, message: err.message});
             }else{
-                blogList.data.total = res;
+                if(blogList.data.blogList.length>0) blogList.data.total = res;
+                else blogList.data.total = 0;
+                blogList.data.lastPage = Math.ceil(blogList.data.total/size);
                 resolve('ok');
             }
         });

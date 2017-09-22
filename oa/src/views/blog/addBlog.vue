@@ -4,14 +4,18 @@
         <div class="page-filter">
             <Row>
                 <i-col span="10">
-                    <Form :model="formItem" :label-width="120">
+                    <Form :model="blogForm" :label-width="120">
                         <FormItem label="文章标题">
-                            <Input v-model="blogForm.title" maxlength="30" placeholder="请输入文章标题"></Input>
+                            <Input v-model="blogForm.title" maxlength="150" placeholder="请输入文章标题"></Input>
                         </FormItem>
                         <FormItem label="文章分类">
                             <Select v-model="blogForm.category" placeholder="请选择文章分类">
-                                <Option v-for="type in typeList" :value="type._id">{{type.typeName}}</Option>
+                                <Option v-for="type in typeList" :value="type._id">{{type.name}}</Option>
                             </Select>
+                        </FormItem>
+                        <FormItem label="文章概述">
+                            <Input v-model="blogForm.des" type="textarea" maxlength="150" :autosize="{minRows: 3,maxRows: 3}" placeholder="请输入文章概述"></Input>
+                            <span>{{blogForm.des.length}} / 150</span>
                         </FormItem>
                     </Form>
                 </i-col>
@@ -41,7 +45,8 @@
             return {
                 blogForm: {
                     title: '',
-                    category: ''
+                    category: '',
+                    des: ''
                 },
                 simple: '',
                 typeList: ''
@@ -85,12 +90,13 @@
                     onOk: function () {
                         let title = _this.blogForm.title,
                             category = _this.blogForm.category,
+                            des = _this.blogForm.des,
                             simple = _this.simple.value();
 
                         this.$ajax({
                             method: 'post',
                             url: '/blog/add',
-                            data: {title: title, type: category, content: simple}
+                            data: {title: title, type: category, content: simple, des: des}
                         }).then(function (res) {
                             if(res.data.code == 0){
                                 _this.$Message.success('您已添加了新的文章~');
