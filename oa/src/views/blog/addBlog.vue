@@ -17,6 +17,12 @@
                             <Input v-model="blogForm.des" type="textarea" maxlength="150" :autosize="{minRows: 3,maxRows: 3}" placeholder="请输入文章概述"></Input>
                             <span>{{blogForm.des.length}} / 150</span>
                         </FormItem>
+                        <FormItem label="文章封面">
+                            <Upload action="gz.file.myqcloud.com/files/v2/1254336074/doden501/blogCover/20170922202901001.jpg"
+                                :headers="{ContentType: 'multipart/form-data'}">
+                                <Button type="ghost" shape="circle" icon="ios-cloud-upload-outline">上传文件</Button>
+                            </Upload>
+                        </FormItem>
                     </Form>
                 </i-col>
             </Row>
