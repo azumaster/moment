@@ -2,7 +2,7 @@
     <div id="addBlog">
         <PageHead title="添加新文章"></PageHead>
         <div class="page-filter">
-            <Row>
+            <Row type="flex" justify="space-between">
                 <i-col span="10">
                     <Form :model="blogForm" :label-width="120">
                         <FormItem label="文章标题">
@@ -18,12 +18,26 @@
                             <span>{{blogForm.des.length}} / 150</span>
                         </FormItem>
                         <FormItem label="文章封面">
-                            <Upload action="gz.file.myqcloud.com/files/v2/1254336074/doden501/blogCover/20170922202901001.jpg"
-                                :headers="{ContentType: 'multipart/form-data'}">
-                                <Button type="ghost" shape="circle" icon="ios-cloud-upload-outline">上传文件</Button>
+                            <Upload ref="upload" accept="image/*" :format="['jpg', 'jpeg', 'png']" type="drag" action="/blog/upload" :on-success="handleSuccess"
+                                    :show-upload-list="false" :max-size="2048" :on-format-error="handleFormat" :on-exceeded-size="handleSize"
+                                    :before-upload="handleBefore">
+                                <div style="padding: 20px 0; border-color: #dddee1">
+                                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                    <p>点击或将文件拖拽到这里上传</p>
+                                </div>
                             </Upload>
+                            <Alert type="warning" show-icon style="margin-top: 20px;">推荐使用 500 * 250 分辨率的 .jpg 后缀的图片；图片大小不得超过2M。
+                            </Alert>
                         </FormItem>
                     </Form>
+                </i-col>
+                <i-col span="10">
+                    <Card>
+                        <p slot="title">文章封面图片预览</p>
+                        <div class="page-img-preview">
+                            <img :src="imgUrl">
+                        </div>
+                    </Card>
                 </i-col>
             </Row>
 
@@ -54,11 +68,13 @@
                     category: '',
                     des: ''
                 },
+                imgUrl: '/dist/img/blogCover/default.jpg',
                 simple: '',
                 typeList: ''
             };
         },
         methods: {
+            // 获取文章类型
             getBlogType: function () {
                 let _this = this;
 
@@ -97,12 +113,13 @@
                         let title = _this.blogForm.title,
                             category = _this.blogForm.category,
                             des = _this.blogForm.des,
+                            cover = _this.imgUrl,
                             simple = _this.simple.value();
 
                         this.$ajax({
                             method: 'post',
                             url: '/blog/add',
-                            data: {title: title, type: category, content: simple, des: des}
+                            data: {title: title, type: category, content: simple, des: des, cover: cover}
                         }).then(function (res) {
                             if(res.data.code == 0){
                                 _this.$Message.success('您已添加了新的文章~');
@@ -115,6 +132,36 @@
                         });
                     }
                 });
+            },
+            // 图片上传前
+            handleBefore: function (file) {
+              this.$Message.loading({
+                content: '图片 ['+file.name+'] 正在上传，请稍后...',
+                duration: 0
+              });
+            },
+            // 图片上传成功
+            handleSuccess: function (event) {
+              if(event.code == 0){
+                this.imgUrl = event.data.imgUrl;
+                this.$Message.destroy();
+              }else{
+                this.$Message.error(event.message);
+              }
+            },
+            handleSize: function (file) {
+              this.$Notice.warning({
+                title: '红西柚悄悄告诉你',
+                desc: '您上传的图片 [' + file.name + '] 过大，请确保你所上传的文章封面图片不超过 2M。'
+              });
+              this.$Message.destroy();
+            },
+            handleFormat: function () {
+              this.$Notice.warning({
+                title: '红西柚悄悄告诉你',
+                desc: '您上传的图片 [' + file.name + '] 格式不正确，请上传 jpg 或 png 格式的图片。'
+              });
+              this.$Message.destroy();
             }
         },
         created: function () {

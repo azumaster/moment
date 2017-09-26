@@ -1,3 +1,5 @@
+const multer = require('koa-multer');
+
 // 三目运算
 let unary = (value, instance) => {
     return value?value:instance;
@@ -16,6 +18,16 @@ let getNow = ()=>{
     return year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;
 };
 
+// 获取当天
+let getToday = ()=>{
+    let date = new Date(),
+        year = date.getFullYear(),
+        month = (date.getMonth()+1)<10?'0'+(date.getMonth()+1):date.getMonth()+1,
+        day = date.getDate()<10?'0'+date.getDate():date.getDate();
+
+  return year+month+day;
+};
+
 // 解析mongodb的时间
 let getDateTime = (dateTime)=>{
     let current = new Date(dateTime);
@@ -26,8 +38,23 @@ let getDateTime = (dateTime)=>{
     return date+' '+time;
 };
 
+// 配置文件上传
+let configUpload = multer.diskStorage({
+  // 文件保存路径
+  destination: function (req, file, cb) {
+    cb(null, './dist/img/blogCover/');
+  },
+  // 修改文件名称
+  filename: function (req, file, cb) {
+    var fileFormat = (file.originalname).split(".");
+    cb(null, getToday()+'C'+Date.now() + "." + fileFormat[fileFormat.length - 1]);
+  }
+});
+
 module.exports = {
     unary: unary,
     getNow: getNow,
-    getDateTime: getDateTime
+    getDateTime: getDateTime,
+    getToday: getToday,
+    upload: multer({storage: configUpload})
 };

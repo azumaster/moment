@@ -3,7 +3,7 @@ var path = require('path'),
 
 module.exports = {
     entry: {
-        moment: ['./src/common/common.js', './src/common/request.js', './src/main.js'],
+        moment: ['./src/common/common.js', './src/main.js'],
         'momentAssets': ['vue', 'iview']
     },
     output: {

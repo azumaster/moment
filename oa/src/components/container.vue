@@ -1,7 +1,7 @@
 <template>
     <div class="moment">
         <header class="moment-header">
-            <div class="header-logo">MOMENT</div>
+            <div class="header-logo"><img src="/dist/img/logo-white.png"></div>
             <div class="header-handle">
                 <div class="header-head"><img :src="user.userHead"></div>
                 <div class="header-info">

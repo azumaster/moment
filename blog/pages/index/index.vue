@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="bloging">
-        <div class="blog-img"><img src="http://pic1.16xx8.com/allimg/161018/1301222C9-0.jpg"></div>
+        <div class="blog-img"><img :src="blog.cover"></div>
         <div class="blog-content">
           <h1><a href="">{{blog.blogTitle}}</a></h1>
           <p>{{blog.blogDes}}</p>
@@ -50,6 +50,9 @@
               res.data.data.blogList.map((blog) => {
                 blog.author.head = 'http://' + window.location.hostname + ':10366' + blog.author.head
                 blog.dateTime = blog.createdAt.split(' ')[0]
+                if (blog.blogCover) {
+                  blog.cover = 'http://' + window.location.hostname + ':10366/' + blog.blogCover.split('./')[1]
+                }
               })
 
               _this.blogList = res.data.data.blogList

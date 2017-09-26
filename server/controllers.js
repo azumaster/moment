@@ -1,4 +1,5 @@
 const fs = require('fs');
+const Common = require('./common/common.js');
 
 //
 function addMapping(router, mapping) {
@@ -9,7 +10,12 @@ function addMapping(router, mapping) {
             router.get(path, mapping[url]);
         } else if (url.startsWith('POST ')) {
             var path = url.substring(5);
-            router.post(path, mapping[url]);
+            if(path.indexOf('upload')!=-1){
+              router.post(path, Common.upload.single('file'), mapping[url]);
+            } else {
+              router.post(path, mapping[url]);
+            }
+
         } else {
             console.log(`invalid URL: ${url}`);
         }

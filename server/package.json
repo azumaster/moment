@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "nuxt build && nuxt start"
   },
   "author": "",
   "license": "ISC",
@@ -14,10 +15,13 @@
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-cors": "0.0.16",
+    "koa-multer": "^1.0.2",
     "koa-router": "^7.2.1",
     "koa-session": "^5.5.0",
     "koa-static": "^4.0.1",
     "mongoose": "^4.11.10"
   },
-  "dependencies": {}
+  "dependencies": {
+    "nuxt": "^1.0.0-rc11"
+  }
 }

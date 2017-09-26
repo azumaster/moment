@@ -36,10 +36,10 @@
                 newType: { typeName: '', typeDes: ''},
                 editType: { typeName: '', typeDes: ''},
                 typeList: [],
-                typeColumns: [{title: '文章分类名', key: 'name'}, {title: '文章分类描述', key: 'des'}, {title: '操作', key: 'action',
+                typeColumns: [{title: '文章分类名', key: 'name'}, {title: '文章分类描述', key: 'des'}, {title: '最近更新时间', key: 'updatedAt'}, {title: '操作', key: 'action',
                     render: (h, params) => {
                         return h('div', [
-                            h('Button', { props: { type: 'primary', shape:'circle', icon: 'edit'}, style: { marginRight: '5px' }, on: { click: () => { this.showEditType(params.index);}}}),
+                            h('Button', { props: { type: 'primary', shape:'circle', icon: 'edit'}, style: { marginRight: '5px' }, on: { click: () => { this.showEditType(params.index);}}}, '编辑'),
                             h('Button', { props: { type: 'error', shape:'circle', icon: 'ios-trash'}, style: { marginRight: '5px' },
                                 on: { click: () => {
 //                                            this.show(params.blogList)

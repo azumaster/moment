@@ -27,23 +27,23 @@ let addType = async (ctx, next) => {
 let getTypeList = async (ctx, next) => {
 
     let typeList = await new Promise((resolve, reject)=>{
-        Type.find({}, function (err, res) {
-            if(err){
-                reject({code: 102, message: err});
-            }else{
-                let typeList = [];
-                res.map((type)=>{
-                   typeList.push({
-                       name: type.typeName,
-                       des: type.typeDes,
-                       _id: type._id,
-                       createdAt: Common.getDateTime(type.createdAt),
-                       updatedAt: Common.getDateTime(type.updatedAt)
-                   });
-                });
+        Type.find({}).sort({'updatedAt': 'desc'}).exec(function (err, res) {
+          if(err){
+            reject({code: 102, message: err});
+          }else{
+            let typeList = [];
+            res.map((type)=>{
+              typeList.push({
+                name: type.typeName,
+                des: type.typeDes,
+                _id: type._id,
+                createdAt: Common.getDateTime(type.createdAt),
+                updatedAt: Common.getDateTime(type.updatedAt)
+              });
+            });
 
-                resolve({code: 0, message: '', data: typeList});
-            }
+            resolve({code: 0, message: '', data: typeList});
+          }
         });
     });
 
@@ -93,9 +93,10 @@ let addBlog = async (ctx, next) => {
         typeId = ctx.request.body.type,
         content = ctx.request.body.content,
         des = ctx.request.body.des,
+        cover = ctx.request.body.cover,
         userId = ctx.session.user.userId;
 
-    let blog = new Blog({blogTitle: title, blogContent: content, blogDes: des, user: userId, type: typeId});
+    let blog = new Blog({blogTitle: title, blogContent: content, blogDes: des, user: userId, type: typeId, blogCover: cover});
 
     let blogRes = await new Promise((resolve, reject)=>{
         blog.save(function (err, res) {
@@ -123,7 +124,7 @@ let getBlogList = async (ctx, next)=>{
         if(type) where.type = type;
 
         Blog.find(where, null, {skip: skip, limit: size})
-            .sort({createdAt: -1})
+            .sort({updatedAt: -1})
             .populate('user').populate('type').exec(function(err, res){
                 if(err){
                     resolve({code: 0, message: err.message, data: {current: page, blogList: []}});
@@ -137,6 +138,7 @@ let getBlogList = async (ctx, next)=>{
                             blogDes: blog.blogDes,
                             createdAt: Common.getDateTime(blog.createdAt),
                             updatedAt: Common.getDateTime(blog.updatedAt),
+                            blogCover: blog.blogCover,
                             blogType: blog.type.typeName,
                             author: {name: blog.user.userName, head: blog.user.userHead}
                         });
@@ -147,7 +149,6 @@ let getBlogList = async (ctx, next)=>{
     });
     await new Promise((resolve, reject)=>{
         Blog.count({}, function (err, res) {
-            console.log(res);
 
             if(err){
                 resolve({code: 102, message: err.message});

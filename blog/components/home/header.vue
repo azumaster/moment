@@ -1,13 +1,21 @@
 <template>
   <header id="header" class="home-header">
     <nav>
-      <h1>红西柚</h1>
+      <div class="header-img"><img :src="imgUrl"></div>
     </nav>
   </header>
 </template>
 
 <script>
   export default {
-    name: 'header'
+    name: 'header',
+    data: function () {
+      return {
+        imgUrl: ''
+      }
+    },
+    mounted: function () {
+      this.imgUrl = 'http://' + window.location.hostname + ':10366/dist/img/logo-colorful.png'
+    }
   }
 </script>
