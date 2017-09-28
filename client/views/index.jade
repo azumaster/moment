@@ -1,0 +1,90 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title 红西柚
+        link(rel="stylesheet", href='/css/reset.css')
+        link(rel="stylesheet", href='/css/style.css')
+    body
+        header.page-header
+            nav
+                div.header-img
+                    img(src="/img/logo-colorful.png")
+
+        main.page-main
+            section.page-left
+                ul.left-list#blogList
+
+                div.loading#loading
+                    i.icon.circle
+                    span 点击加载更多
+            section.page-right
+                div.right-item
+                    div.item-header
+                        img(src='http://www.qq1234.org/uploads/allimg/150506/1213523V1-2.jpg')
+                    article.item-name
+                        h1 AZUMAR
+                        p ENJOY THE BEST TODAY
+                    div.item-link
+                        span.icon.github
+                        span.icon.weibo
+                div.right-item
+                    div.item-title
+                        h3 文章分类
+                    ul.item-list
+                        each type in data
+                            a(href="#")
+                                li
+                                    span #{type.name}
+                                    span.icon.right
+                div.right-item
+                    div.item-title
+                        h3 ABOUT
+                    ul.item-list
+                        li Copyright 2017 &copy; DODEN
+                        li 蜀ICP备 2017092812444
+
+    script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
+    script.
+
+      var page = 1,
+        size = 10;
+
+      (function () {
+        getBlogList();
+      })();
+
+
+      function getBlogList() {
+        $.ajax({
+          url: '/blog/list',
+          type: 'get',
+          data: { page: page, size: size },
+          success: function (res) {
+            if(res.code == 0){
+                var list = document.getElementById('blogList'),
+                    blogList = res.data.blogList;
+                var lis = '';
+
+                for(var i = 0; i< blogList.length; i++){
+                  lis += '<li class="left-item">' +
+                    '<div class="blog-info">' +
+                    '<div class="blog-author"><img src="http://'+window.location.hostname+':10366'+blogList[i].author.head+'"><p>'+blogList[i].author.name+'</p></div>' +
+                    '<div class="blog-extra">' +
+                    '<p><span class="icon clock"></span><span>'+blogList[i].createdAt.split(' ')[0]+'</span></p><p><span class="icon category"></span><span>'+blogList[i].blogType+'</span></p>' +
+                    '</div>' +
+                    '</div><div class="blog-detail">' +
+                    (blogList[i].blogCover?'<div class="blog-cover"><a href="/blog/'+blogList[i]._id+'"><img src="http://'+window.location.hostname+':10366/'+blogList[i].blogCover+'"></a></div>':'')+
+                    '<div class="blog-title"><h1><a href="/blog/'+blogList[i]._id+'">'+blogList[i].blogTitle+'</a></h1>'+(blogList[i].blogDes?'<p>'+blogList[i].blogDes+'</p>':'')+'</div>' +
+                    '<div class="blog-oper"><a href="/blog/'+blogList[i]._id+'">点此查看全文 <span class="icon right"></span></a></div>' +
+                    '</div></li>';
+                }
+
+                list.innerHTML = lis;
+
+            }else {
+
+            }
+          }
+        });
+      }

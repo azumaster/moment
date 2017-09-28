@@ -1,0 +1,88 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title #{blog.data.blogTitle} - 红西柚
+        link(rel="stylesheet", href='/css/reset.css')
+        link(rel="stylesheet", href='/css/highlight.css')
+        link(rel="stylesheet", href='/css/marked.css')
+        link(rel="stylesheet", href='/css/style.css')
+        style.
+
+            .page-main .page-left { flex: 3; margin-right: 20px; overflow: hidden;}
+            .page.main .page-left .blog-inner { background: #ffffff; box-shadow: 0 0 5px #c0c0c0; margin-bottom: 40px; }
+            .page-main .page-right { flex: 1; margin-left: 20px; overflow: hidden; }
+
+
+
+            .blog-title { margin: 30px; position: relative }
+            .blog-title h1 { margin: 0; line-height: 40px; margin-bottom: 20px; min-height: 80px; color: #333333; width: 80%; font-size: 24px; }
+            .blog-title .see { position: absolute; top: 0; right: 0; background: #e75411; color: #ffffff; padding: 10px; font-size: 14px; border-radius: 5px; min-width: 30px; text-align: center; }
+            .blog-title .see:before {position: absolute; content: '';  border-left: 5px solid transparent;  border-right: 5px solid transparent;  border-top: 10px solid #e75411; bottom: -8px; }
+            .blog-title p { background: #f5f5f5; width: 50%; margin: 0 auto; font-size: 12px; color: #999999; display: flex; justify-content: space-between; line-height: 40px; padding: 0 20px; }
+            .blog-title p>span i { margin-right: 10px; }
+            .blog-content { margin: 80px 30px; color: #333333; }
+
+    body
+        header.page-header
+            nav
+                div.header-img
+                    img(src="/img/logo-colorful.png")
+
+        main.page-main
+            section.page-left
+                div.blog-inner
+                    div.blog-title
+                        h1 #{blog.data.blogTitle}
+                        div.see 0
+                        p
+                            span
+                                i.icon.clock
+                                span #{blog.data.createdAt}
+                            span
+                                i.icon.author
+                                span #{blog.data.blogUser}
+                            span
+                                i.icon.category
+                                span #{blog.data.blogType}
+                    div.blog-content#blogContent #{blog.data.blogContent}
+                    div.blog-oper
+            section.page-right
+                div.right-item
+                    div.item-header
+                        img(src='http://www.qq1234.org/uploads/allimg/150506/1213523V1-2.jpg')
+                    article.item-name
+                        h1 AZUMAR
+                        p ENJOY THE BEST TODAY
+                    div.item-link
+                        span.icon.github
+                        span.icon.weibo
+                div.right-item
+                    div.item-title
+                        h3 文章分类
+                    ul.item-list
+                        each t in type.data
+                            a(href="#")
+                                li
+                                    span #{t.name}
+                                    span.icon.right
+                div.right-item
+                    div.item-title
+                        h3 ABOUT
+                    ul.item-list
+                        li Copyright 2017 &copy; DODEN
+                        li 蜀ICP备 2017092812444
+
+    script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
+    script(src="https://cdn.bootcss.com/marked/0.3.6/marked.min.js")
+    script(src="/js/highlight.js")
+    script.
+      (function () {
+        translateHtml()
+      })();
+
+      function translateHtml () {
+        hljs.initHighlightingOnLoad();
+        var dom = document.getElementById('blogContent');
+        dom.innerHTML = marked(dom.innerHTML);
+      }

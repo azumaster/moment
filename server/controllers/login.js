@@ -81,7 +81,6 @@ let getPwd = (pwd) => {
     return Signture.digest().toString('base64');
 };
 
-
 module.exports = {
     'POST /user/login': login,
     'POST /user/register': register,
