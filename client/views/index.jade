@@ -17,17 +17,19 @@ html
 
                 div.loading#loading
                     i.icon.circle
-                    span 点击加载更多
+                    span(onclick="loadMore();") 点击加载更多
             section.page-right
                 div.right-item
                     div.item-header
                         img(src='http://www.qq1234.org/uploads/allimg/150506/1213523V1-2.jpg')
                     article.item-name
-                        h1 AZUMAR
+                        h1 红西柚
                         p ENJOY THE BEST TODAY
                     div.item-link
-                        span.icon.github
-                        span.icon.weibo
+                        a(href="https://github.com/azumaster", target="_blank")
+                            span.icon.github
+                        a(href="https://weibo.com/u/6336201134", target="_blank")
+                            span.icon.weibo
                 div.right-item
                     div.item-title
                         h3 文章分类
@@ -37,18 +39,16 @@ html
                                 li
                                     span #{type.name}
                                     span.icon.right
-                div.right-item
-                    div.item-title
-                        h3 ABOUT
-                    ul.item-list
-                        li Copyright 2017 &copy; DODEN
-                        li 蜀ICP备 2017092812444
-
+        footer.page-footer
+            p CopyRight &copy; 2017. Doden
+            p 蜀ICP备17035254号
+                a(href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51012202000222", target="_blank") 川公网安备 51012202000222 号
     script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
     script.
 
       var page = 1,
-        size = 10;
+        size = 5,
+        lis = '';
 
       (function () {
         getBlogList();
@@ -64,7 +64,12 @@ html
             if(res.code == 0){
                 var list = document.getElementById('blogList'),
                     blogList = res.data.blogList;
-                var lis = '';
+                var current = res.data.current,
+                    lastPage = res.data.lastPage;
+
+                if(current == lastPage){
+                    document.getElementById('loading').style.display = 'none';
+                }
 
                 for(var i = 0; i< blogList.length; i++){
                   lis += '<li class="left-item">' +
@@ -87,4 +92,9 @@ html
             }
           }
         });
+      }
+
+      function loadMore() {
+          page ++;
+          getBlogList();
       }

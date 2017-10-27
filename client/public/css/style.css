@@ -24,7 +24,10 @@ body { margin: 0; height: 0; background: #f5f5f5; font-family: "Helvetica Neue",
 
 .page-main { display: flex; width: 1200px; margin: 10px auto 0; }
 .page-main .page-left { flex: 3; margin-right: 20px; overflow: hidden; }
+.page-main .page-left .blog-inner { background: #ffffff; box-shadow: 0 0 5px #c0c0c0; margin-bottom: 40px; overflow: hidden; }
 .page-main .page-right { flex: 1; margin-left: 20px; overflow: hidden; }
+
+.page-footer { height: 30px; display: flex; justify-content: space-between; line-height: 30px; }
 
 .right-item { background: #ffffff; margin-bottom: 40px; box-shadow: 0 0 5px #c0c0c0; overflow: hidden; }
 .right-item .item-header { background: url('http://pic.pptbz.com/201501/2015041077601145.JPG') no-repeat; background-size: cover; height: 100px; position: relative; }
@@ -33,6 +36,7 @@ body { margin: 0; height: 0; background: #f5f5f5; font-family: "Helvetica Neue",
 .right-item .item-name h1 { font-weight: normal; font-size: 16px; line-height: 30px; color: #333333; margin: 0; }
 .right-item .item-name p { font-size: 12px; line-height: 20px; margin: 0; color: #999999 }
 .right-item .item-link { text-align: center; line-height: 50px; }
+.right-item .item-link a { text-decoration: none }
 .right-item .item-link span { font-size: 24px; margin: 0 5px; cursor: pointer; transition: color .2s linear; color: #999999; }
 .right-item .item-link span:hover { color: #E75411; transition: color .2s linear; }
 .right-item .item-title { margin: 10px; }
@@ -68,3 +72,12 @@ body { margin: 0; height: 0; background: #f5f5f5; font-family: "Helvetica Neue",
 .loading { height: 40px; padding: 0 20px; line-height: 40px; text-align: center; background: #666666; color: #ffffff; width: 150px; font-size: 14px; margin-bottom: 40px; float: right; cursor: pointer; }
 .loading i { margin-right: 10px; }
 .loading:active { background: #333333; }
+
+.blog-title { margin: 30px; position: relative }
+.blog-title h1 { margin: 0; line-height: 40px; margin-bottom: 20px; min-height: 80px; color: #333333; width: 80%; font-size: 24px; }
+.blog-title .see { position: absolute; top: 0; right: 0; background: #e75411; color: #ffffff; padding: 10px; font-size: 14px; border-radius: 5px; min-width: 30px; text-align: center; }
+.blog-title .see:before {position: absolute; content: '';  border-left: 5px solid transparent;  border-right: 5px solid transparent;  border-top: 10px solid #e75411; bottom: -8px; }
+.blog-title p { background: #f5f5f5; width: 80%; margin: 0 auto 20px; font-size: 12px; color: #999999; display: flex; justify-content: space-between; line-height: 40px; padding: 0 20px; }
+.blog-title p>span i { margin-right: 10px; }
+.blog-content { margin: 80px 30px 40px 30px; color: #333333; }
+.blog-content-end { border-left: 4px solid #e75411; padding-left: 20px; margin: 0 30px 40px 30px; }
