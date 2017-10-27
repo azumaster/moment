@@ -110,16 +110,21 @@
                     content: '确定你已经编辑好文章，可以发布了吗？',
                     okText: '确认发布',
                     onOk: function () {
-                        let title = _this.blogForm.title,
-                            category = _this.blogForm.category,
-                            des = _this.blogForm.des,
-                            cover = _this.imgUrl,
-                            simple = _this.simple.value();
+                        let data = {
+                            title: _this.blogForm.title,
+                            type: _this.blogForm.category,
+                            content: _this.simple.value(),
+                            des: _this.blogForm.des
+                        };
+
+                        if(_this.imgUrl.indexOf('default')==-1){
+                            data.cover = _this.imgUrl;
+                        }
 
                         this.$ajax({
                             method: 'post',
                             url: '/blog/add',
-                            data: {title: title, type: category, content: simple, des: des, cover: cover}
+                            data: data
                         }).then(function (res) {
                             if(res.data.code == 0){
                                 _this.$Message.success('您已添加了新的文章~');

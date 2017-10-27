@@ -6,95 +6,32 @@ html
         link(rel="stylesheet", href='/css/reset.css')
         link(rel="stylesheet", href='/css/style.css')
     body
-        header.page-header
-            nav
-                div.header-img
-                    img(src="/img/logo-colorful.png")
+        include components/header
 
         main.page-main
-            section.page-left
+            section#pageLeft.page-left
                 ul.left-list#blogList
 
                 div.loading#loading
                     i.icon.circle
                     span(onclick="loadMore();") 点击加载更多
             section.page-right
-                div.right-item
-                    div.item-header
-                        img(src='http://www.qq1234.org/uploads/allimg/150506/1213523V1-2.jpg')
-                    article.item-name
-                        h1 红西柚
-                        p ENJOY THE BEST TODAY
-                    div.item-link
-                        a(href="https://github.com/azumaster", target="_blank")
-                            span.icon.github
-                        a(href="https://weibo.com/u/6336201134", target="_blank")
-                            span.icon.weibo
+                include components/about
                 div.right-item
                     div.item-title
                         h3 文章分类
                     ul.item-list
-                        each type in data
-                            a(href="#")
-                                li
-                                    span #{type.name}
-                                    span.icon.right
-        footer.page-footer
-            p CopyRight &copy; 2017. Doden
-            p 蜀ICP备17035254号
-                a(href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51012202000222", target="_blank") 川公网安备 51012202000222 号
+                        li(onclick="loadCategory();")
+                            span 全部
+                            span.icon.right
+
+                        each t in type.data
+                            li(onclick="loadCategory(this);")
+                                span.typeId #{t._id}
+                                span #{t.name}
+                                span.icon.right
+
+        include components/footer
+
     script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
-    script.
-
-      var page = 1,
-        size = 5,
-        lis = '';
-
-      (function () {
-        getBlogList();
-      })();
-
-
-      function getBlogList() {
-        $.ajax({
-          url: '/blog/list',
-          type: 'get',
-          data: { page: page, size: size },
-          success: function (res) {
-            if(res.code == 0){
-                var list = document.getElementById('blogList'),
-                    blogList = res.data.blogList;
-                var current = res.data.current,
-                    lastPage = res.data.lastPage;
-
-                if(current == lastPage){
-                    document.getElementById('loading').style.display = 'none';
-                }
-
-                for(var i = 0; i< blogList.length; i++){
-                  lis += '<li class="left-item">' +
-                    '<div class="blog-info">' +
-                    '<div class="blog-author"><img src="http://'+window.location.hostname+':10366'+blogList[i].author.head+'"><p>'+blogList[i].author.name+'</p></div>' +
-                    '<div class="blog-extra">' +
-                    '<p><span class="icon clock"></span><span>'+blogList[i].createdAt.split(' ')[0]+'</span></p><p><span class="icon category"></span><span>'+blogList[i].blogType+'</span></p>' +
-                    '</div>' +
-                    '</div><div class="blog-detail">' +
-                    (blogList[i].blogCover?'<div class="blog-cover"><a href="/blog/'+blogList[i]._id+'"><img src="http://'+window.location.hostname+':10366/'+blogList[i].blogCover+'"></a></div>':'')+
-                    '<div class="blog-title"><h1><a href="/blog/'+blogList[i]._id+'">'+blogList[i].blogTitle+'</a></h1>'+(blogList[i].blogDes?'<p>'+blogList[i].blogDes+'</p>':'')+'</div>' +
-                    '<div class="blog-oper"><a href="/blog/'+blogList[i]._id+'">点此查看全文 <span class="icon right"></span></a></div>' +
-                    '</div></li>';
-                }
-
-                list.innerHTML = lis;
-
-            }else {
-
-            }
-          }
-        });
-      }
-
-      function loadMore() {
-          page ++;
-          getBlogList();
-      }
+    script(src="js/script.js")

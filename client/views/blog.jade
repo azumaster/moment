@@ -8,10 +8,7 @@ html
         link(rel="stylesheet", href='/css/marked.css')
         link(rel="stylesheet", href='/css/style.css')
     body
-        header.page-header
-            nav
-                div.header-img
-                    img(src="/img/logo-colorful.png")
+        include components/header
 
         main.page-main
             section.page-left
@@ -33,30 +30,22 @@ html
                     div.blog-content-end （完）
                     div.blog-oper
             section.page-right
-                div.right-item
-                    div.item-header
-                        img(src='http://www.qq1234.org/uploads/allimg/150506/1213523V1-2.jpg')
-                    article.item-name
-                        h1 AZUMAR
-                        p ENJOY THE BEST TODAY
-                    div.item-link
-                        span.icon.github
-                        span.icon.weibo
+                include components/about
                 div.right-item
                     div.item-title
                         h3 文章分类
                     ul.item-list
+                        li(onclick="loadCategory();")
+                            span 全部
+                            span.icon.right
+
                         each t in type.data
-                            a(href="#")
-                                li
-                                    span #{t.name}
-                                    span.icon.right
-                div.right-item
-                    div.item-title
-                        h3 ABOUT
-                    ul.item-list
-                        li Copyright 2017 &copy; DODEN
-                        li 蜀ICP备 2017092812444
+                            li(onclick="loadCategory(this);")
+                                span.typeId #{t._id}
+                                span #{t.name}
+                                span.icon.right
+
+        include components/footer
 
     script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
     script(src="https://cdn.bootcss.com/marked/0.3.6/marked.min.js")
@@ -70,4 +59,10 @@ html
         hljs.initHighlightingOnLoad();
         var dom = document.getElementById('blogContent');
         dom.innerHTML = marked(dom.innerHTML);
+      }
+
+      function loadCategory(obj) {
+          if(obj){
+
+          }
       }

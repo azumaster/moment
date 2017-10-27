@@ -26,7 +26,7 @@ let viewHome = async (ctx, next) => {
       }
     });
   });
-  await ctx.render('index.jade', typeList);
+  await ctx.render('index.jade', {type: typeList});
 };
 
 // 获取文章列表
@@ -36,10 +36,10 @@ let getBlogList = async (ctx, next) => {
     skip = size*(page-1);
 
   let type = ctx.query.type;
+  let where = {};
+  if(type) where.type = type;
 
   let blogList = await new Promise((resolve)=>{
-    let where = {};
-    if(type) where.type = type;
 
     Blog.find(where, null, {skip: skip, limit: size})
       .sort({updatedAt: -1})
@@ -66,7 +66,7 @@ let getBlogList = async (ctx, next) => {
     });
   });
   await new Promise((resolve, reject)=>{
-    Blog.count({}, function (err, res) {
+    Blog.count(where, function (err, res) {
 
       if(err){
         resolve({code: 102, message: err.message});
