@@ -11,7 +11,13 @@ var page = 1,
 
 function getBlogList(type) {
     var data = { page: page, size:size };
-    if(type){
+    var id = window.location.search.split('=')[1];
+
+    if(id){
+        data.type = id;
+    }
+
+    if(type{
         data.type = type;
     }
 

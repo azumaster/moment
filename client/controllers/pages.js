@@ -31,7 +31,7 @@ let viewHome = async (ctx, next) => {
 
 // 获取文章列表
 let getBlogList = async (ctx, next) => {
-  let page = parseInt(ctx.query.page),
+    let page = parseInt(ctx.query.page),
     size = parseInt(ctx.query.size),
     skip = size*(page-1);
 

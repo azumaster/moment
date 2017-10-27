@@ -63,6 +63,9 @@ html
 
       function loadCategory(obj) {
           if(obj){
-
+              let str = '/?id='+obj.children[0].innerText;
+              window.location.replace(str);
+          } else {
+              window.location.href = '/';
           }
       }
