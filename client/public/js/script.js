@@ -7,17 +7,15 @@ var page = 1,
     getBlogList();
 })();
 
-
-
 function getBlogList(type) {
     var data = { page: page, size:size };
-    var id = window.location.search.split('=')[1];
 
-    if(id){
-        data.type = id;
+    if(localStorage.getItem('categoryId')){
+        data.type = localStorage.getItem('categoryId');
+        localStorage.removeItem('categoryId');
     }
 
-    if(type{
+    if(type){
         data.type = type;
     }
 
