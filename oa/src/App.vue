@@ -13,7 +13,7 @@
         components: {Container, Login},
         data () {
             return {
-                isLogin: false
+                isLogin: true
             };
         },
         methods: {
@@ -41,7 +41,7 @@
             this.getLogin();
         },
         /**
-         * 监听vuex的store中的state,需要通过computed生命周期获取到state的值
+         * 监听vuex的store中的state,需要通过computed获取到state的值
          * 再通过watch去改变vue组件中的data的值
          */
         computed: {
@@ -56,12 +56,3 @@
         }
     };
 </script>
-<style>
-    .room_img{
-     width: 320px;
-     height: 240px;
-     margin-right: 10px;
-     position: absolute;
-     overflow: hidden;
-   }
-</style>

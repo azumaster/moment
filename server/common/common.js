@@ -1,4 +1,5 @@
 const multer = require('koa-multer');
+const crypto = require('crypto');
 
 // 三目运算
 let unary = (value, instance) => {
@@ -51,10 +52,34 @@ let configUpload = multer.diskStorage({
   }
 });
 
+// 随机6位数
+let randomSix = ()=>{
+    let num="";
+    for(let i=0;i<6;i++)
+    {
+        num+=Math.floor(Math.random()*10);
+    }
+
+    return num;
+};
+
+// 获取短信SIG
+function getSmsSig(rand, curTime, phoneNumbers) {
+    var phoneNumberStr = phoneNumbers[0];
+    for (var i = 1; i < phoneNumbers.length; i++) {
+        phoneNumberStr += (','+phoneNumbers[i]);
+    }
+
+    // 一定要使用 utf-8 编码
+    return crypto.createHash('sha256').update('appkey=41b544f5380e4d75ed50cf954d93759e&random='+rand+'&time='+curTime+'&mobile='+phoneNumberStr, 'utf-8').digest('hex');
+}
+
 module.exports = {
     unary: unary,
     getNow: getNow,
     getDateTime: getDateTime,
     getToday: getToday,
-    upload: multer({storage: configUpload})
+    upload: multer({storage: configUpload}),
+    randomSix: randomSix,
+    getSmsSig: getSmsSig
 };
