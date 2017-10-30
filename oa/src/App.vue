@@ -13,7 +13,7 @@
         components: {Container, Login},
         data () {
             return {
-                isLogin: true
+                isLogin: false
             };
         },
         methods: {

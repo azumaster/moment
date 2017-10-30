@@ -141,11 +141,17 @@ let editUserBasic = async (ctx, next)=> {
                     resolve({code: 504, message: '验证码已经过期，请重新获取~'});
                 } else {
                     // 有效，可以修改手机
+                    User.update({_id: uId}, {userName: data.name, userMobile: data.mobile}, function(err, res){
+                        if (err) {
+                            resolve({code: 102, message: err});
+                        }
+                        else {
+                            ctx.session.user = getCurrentLoginUser(uId).data;
+                            resolve(getCurrentLoginUser(uId));
+                        }
+                    });
 
                 }
-
-                console.log(updatedTime);
-                console.log(now);
             } else{
                 resolve({code: 201, message: '验证码无效，请重新获取~'});
 
@@ -157,12 +163,11 @@ let editUserBasic = async (ctx, next)=> {
 
         let updateUserOnlyName = await new Promise((resolve)=>{
             User.update({_id: uId}, {userName: data.name}, function(err, res){
-                console.log(res);
                 if (err) {
                     resolve({code: 102, message: err});
                 }
                 else {
-                    ctx.session.user = getCurrentLoginUser(uId).user;
+                    ctx.session.user = getCurrentLoginUser(uId).data;
                     resolve(getCurrentLoginUser(uId));
                 }
             });
@@ -174,21 +179,26 @@ let editUserBasic = async (ctx, next)=> {
 
 // 获取当前登录用户的所有信息
 let getCurrentLoginUser = async (uId)=>{
-    User.find({_id: uId}).exec((err, res)=>{
-        if(err) {
-            return {code: 102, message: err};
-        } else {
-            let user = {
-                userId: res[0]._id,
-                userName: common.unary(res[0].userName, res[0].userMobile),
-                userMobile: common.unary(res[0].userMobile, '10000000000'),
-                userHead: common.unary(res[0].userHead, ''),
-                userType: common.unary(res[0].userType, 3)
-            };
 
-            return {code: 0, message:'更新成功', data: user};
-        }
+    let currentLoginUser = await new Promise((resolve)=>{
+        User.find({_id: uId}).exec((err, res)=>{
+            if(err) {
+                resolve({code: 102, message: err});
+            } else {
+                let user = {
+                    userId: res[0]._id,
+                    userName: common.unary(res[0].userName, res[0].userMobile),
+                    userMobile: common.unary(res[0].userMobile, '10000000000'),
+                    userHead: common.unary(res[0].userHead, ''),
+                    userType: common.unary(res[0].userType, 3)
+                };
+
+                resolve({code: 0, message:'更新成功', data: user});
+            }
+        });
     });
+
+    return currentLoginUser;
 };
 
 module.exports = {
