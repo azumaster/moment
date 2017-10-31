@@ -30,7 +30,13 @@
                         </FormItem>
                     </Form>
                 </TabPane>
-                <TabPane label="修改密码" name="pwd">23324</TabPane>
+                <TabPane label="修改密码" name="pwd">
+                    <Form :model="userPwd" :label-width="80" :rules="checkPwd">
+                        <FormItem label="旧密码" prop="oldPwd">
+                            <Input type="password" v-model="userPwd.oldPwd" placeholder="请输入旧密码"></Input>
+                        </FormItem>
+                    </Form>
+                </TabPane>
                 <TabPane label="更换头像" name="head">标签三的内容</TabPane>
             </Tabs>
         </Modal>
@@ -38,6 +44,9 @@
 </template>
 
 <script>
+
+    import crypto from 'crypto';
+
     let userBasic = {
         data: { name: '', mobile: '', verify: '' },
         length: { mobile: 11, verify: 6 },
@@ -48,6 +57,29 @@
     export default {
         name: 'home',
         data: function () {
+            const validateOldPwd = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入原有的密码~'));
+                } else {
+                    // 验证原有的密码
+                    let pwd = value;
+                    pwd = crypto.createHmac('sha1', 'azumar').update(pwd).digest().toString('base64');
+
+                    this.$ajax({
+                        method: 'post',
+                        url: '/user/checkOldPwd',
+                        data: {pwd: pwd}
+                    }).then(function (res) {
+                        if(res.data.code == 0){
+
+                        }else{
+                            _this.$Message.error(res.data.message);
+                        }
+                    }).catch(function () {
+                        _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                    });
+                }
+            };
             return {
                 user: {},
                 userRole: ['超级管理员', '部门管理员', '专员'],
@@ -58,6 +90,16 @@
                     length: { mobile: 11, verify: 6 },
                     state: { disabled: false },
                     text: { getVerify: '获取验证码' }
+                },
+                userPwd: {
+                    oldPwd: '',
+                    newPwd: '',
+                    dbNewPwd: ''
+                },
+                checkPwd: {
+                    oldPwd: [
+                        { validator: validateOldPwd, trigger: 'blur' }
+                    ],
                 }
             };
         },

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Home from './../views/home/home.vue';
+import EditMe from './../views/home/editUser.vue';
 
 import User from './../views/user/user.vue';
 import UserList from './../views/user/userList.vue';
@@ -20,7 +21,7 @@ export default new Router({
         {path: '/', component: Home},
         {path: '/home', redirect: '/'},
         {path: '/userList', component: User, children: [
-            {path: '', component: UserList}
+            {path: '', component: UserList}, {path: 'editMe', component: EditMe}
         ]},
         {path: '/blogList', component: Blog, children: [
             {path: '', component: BlogList}, {path: 'addBlog', component: AddBlog}
