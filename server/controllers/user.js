@@ -113,6 +113,13 @@ let sendVerify = async (ctx, next) => {
     ctx.response.body = smsResult;
 };
 
+// 判断是否和旧密码一样
+let checkOldPwd = async (ctx, next) => {
+    let pwd = ctx.request.body.pwd;
+
+    console.log(pwd);
+};
+
 // 修改基本资料
 let editUserBasic = async (ctx, next)=> {
     let data = ctx.request.body,
@@ -223,6 +230,7 @@ let getCurrentLoginUser = async (uId)=>{
 module.exports = {
     'GET /user/getUserList': getUserList,
     'POST /user/sendVerify': sendVerify,
+    'POST /user/checkOldPwd': checkOldPwd,
     'POST /user/editUserBasic': editUserBasic,
     'POST /user/editUserHead': editUserHead
 };

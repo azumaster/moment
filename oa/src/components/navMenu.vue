@@ -5,7 +5,7 @@
                 <MenuGroup >
                     <MenuItem name="home"><Icon type="planet"></Icon>首页</MenuItem>
                 </MenuGroup>
-                <MenuGroup title="用户管理">
+                <MenuGroup v-if="showSection" title="用户管理">
                     <MenuItem name="userList"><Icon type="person-stalker"></Icon>用户列表</MenuItem>
                 </MenuGroup>
                 <MenuGroup title="文章管理">
@@ -23,9 +23,40 @@
 
 <script>
     export default {
+        data: function () {
+            return {
+                user: {},
+                showSection: true
+            };
+        },
         methods: {
             changeMenu: function (name) {
                 window.location.href = '/#/'+name;
+            }
+        },
+        mounted: function () {
+            let userType = this.user.userType;
+            switch (userType) {
+                case 1:
+                    // 超级管理员，不做任何判断
+                    break;
+                case 2:
+                    // 部门管理员，不显示用户管理
+                    this.showSection = false;
+                    break;
+                case 3:
+                    break;
+            }
+        },
+        computed: {
+            getUser () {
+                this.user = this.$store.state.user;
+                return this.$store.state.user;
+            }
+        },
+        watch: {
+            getUser (val) {
+                this.user = val;
             }
         }
     };

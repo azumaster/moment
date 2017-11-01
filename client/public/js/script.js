@@ -42,9 +42,15 @@ function getBlogList(type) {
                         '</div>'
                 } else {
                     for(var i = 0; i< blogList.length; i++){
+
+                        let headUrl = blogList[i].author.head;
+                        if(headUrl.indexOf('./')!=-1){
+                            headUrl = headUrl.substr(1, headUrl.length-1);
+                        }
+
                         lis += '<li class="left-item">' +
                             '<div class="blog-info">' +
-                            '<div class="blog-author"><img src="http://'+window.location.hostname+':10366'+blogList[i].author.head+'"><p>'+blogList[i].author.name+'</p></div>' +
+                            '<div class="blog-author"><img src="http://'+window.location.hostname+':10366'+headUrl+'"><p>'+blogList[i].author.name+'</p></div>' +
                             '<div class="blog-extra">' +
                             '<p><span class="icon clock"></span><span>'+blogList[i].createdAt.split(' ')[0]+'</span></p><p><span class="icon category"></span><span>'+blogList[i].blogType+'</span></p>' +
                             '</div>' +
