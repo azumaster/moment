@@ -43,7 +43,15 @@ let getDateTime = (dateTime)=>{
 let configUpload = multer.diskStorage({
   // 文件保存路径
   destination: function (req, file, cb) {
-    cb(null, './dist/img/blogCover/');
+    let type = req.url.split('/')[1];
+    switch (type) {
+        case 'user':
+            cb(null, './dist/img/userHead/');
+            break;
+        case 'blog':
+            cb(null, './dist/img/blogCover/');
+            break;
+    }
   },
   // 修改文件名称
   filename: function (req, file, cb) {

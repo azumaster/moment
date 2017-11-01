@@ -37,7 +37,17 @@
                         </FormItem>
                     </Form>
                 </TabPane>
-                <TabPane label="更换头像" name="head">标签三的内容</TabPane>
+                <TabPane label="更换头像" name="head">
+                    <Upload ref="upload" accept="image/*" :format="['jpg', 'jpeg', 'png']" action="/user/upload" :on-success="handleSuccess"
+                            :show-upload-list="false" :max-size="2048" :on-format-error="handleFormat" :on-exceeded-size="handleSize"
+                            :before-upload="handleBefore">
+                        <Button type="ghost" icon="ios-cloud-upload-outline">上传图片</Button>
+                    </Upload>
+                    <Alert type="warning" show-icon style="margin-top: 20px;">推荐使用 200 * 200 分辨率的 .jpg 后缀的图片；图片大小不得超过2M。</Alert>
+                    <div class="user-card-head-img">
+                        <img :src="imgUrl">
+                    </div>
+                </TabPane>
             </Tabs>
         </Modal>
     </div>
@@ -99,8 +109,9 @@
                 checkPwd: {
                     oldPwd: [
                         { validator: validateOldPwd, trigger: 'blur' }
-                    ],
-                }
+                    ]
+                },
+                imgUrl: '/dist/img/userHead/default.jpg'
             };
         },
         methods: {
@@ -149,6 +160,7 @@
                     case 'pwd':
                         break;
                     case 'head':
+                        this.editUserHead();
                         break;
                 }
             },
@@ -173,6 +185,56 @@
                 });
 
                 this.userBasic = userBasic;
+            },
+            // 图片上传前
+            handleBefore: function (file) {
+                this.$Message.loading({
+                    content: '图片 ['+file.name+'] 正在上传，请稍后...',
+                    duration: 0
+                });
+            },
+            // 图片上传成功
+            handleSuccess: function (event) {
+                if(event.code == 0){
+                    this.imgUrl = event.data.imgUrl;
+                    this.$Message.destroy();
+                }else{
+                    this.$Message.error(event.message);
+                }
+            },
+            handleSize: function (file) {
+                this.$Notice.warning({
+                    title: '红西柚悄悄告诉你',
+                    desc: '您上传的图片 [' + file.name + '] 过大，请确保你所上传的文章封面图片不超过 2M。'
+                });
+                this.$Message.destroy();
+            },
+            handleFormat: function () {
+                this.$Notice.warning({
+                    title: '红西柚悄悄告诉你',
+                    desc: '您上传的图片 [' + file.name + '] 格式不正确，请上传 jpg 或 png 格式的图片。'
+                });
+                this.$Message.destroy();
+            },
+            // 确认修改头像
+            editUserHead: function () {
+                let img = this.imgUrl,
+                    _this = this;
+
+                this.$ajax({
+                    method: 'post',
+                    url: '/user/editUserHead',
+                    data: {img: img}
+                }).then(function (res) {
+                    if(res.data.code == 0){
+                        _this.$Message.success('修改成功！');
+                        _this.$store.state.user = res.data.data;
+                    }else{
+                        _this.$Message.error(res.data.message);
+                    }
+                }).catch(function () {
+                    _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                });
             }
         },
         computed: {

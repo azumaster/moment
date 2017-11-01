@@ -177,6 +177,25 @@ let editUserBasic = async (ctx, next)=> {
     }
 };
 
+// 修改用户头像
+let editUserHead = async (ctx, next)=> {
+    let img = ctx.request.body.img,
+        uId = ctx.session.user.userId;
+
+
+    let response = await new Promise((resolve, reject)=>{
+        User.update({_id: uId}, {userHead: img}, function(err, res){
+            if(err){
+                resolve({code: 102, message: err});
+            }else {
+                ctx.session.user = getCurrentLoginUser(uId).data;
+                resolve(getCurrentLoginUser(uId));
+            }
+        });
+    });
+    ctx.response.body = response;
+};
+
 // 获取当前登录用户的所有信息
 let getCurrentLoginUser = async (uId)=>{
 
@@ -204,5 +223,6 @@ let getCurrentLoginUser = async (uId)=>{
 module.exports = {
     'GET /user/getUserList': getUserList,
     'POST /user/sendVerify': sendVerify,
-    'POST /user/editUserBasic': editUserBasic
+    'POST /user/editUserBasic': editUserBasic,
+    'POST /user/editUserHead': editUserHead
 };
