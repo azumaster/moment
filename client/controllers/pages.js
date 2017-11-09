@@ -149,7 +149,7 @@ let viewBlog = async (ctx, next) => {
 
     await new Promise((resolve) => {
 
-        if(ctx.session.blogId == blogInfo.id){
+        if(ctx.session.blogId == blogInfo._id){
             resolve('pvOk');
         }else{
             let pv = blogInfo.blogPv;
