@@ -97,7 +97,7 @@ let viewBlog = async (ctx, next) => {
                     blogTitle: res.blogTitle,
                     blogUser: res.user,
                     blogType: res.type,
-                    blogPv: res.blogPv,
+                    blogPv: res.blogPv?res.blogPv:0,
                     createdAt: Common.getDateTime(res.createdAt).split(' ')[0],
                     updatedAt: Common.getDateTime(res.updatedAt).split(' ')[0]
                 };
@@ -149,13 +149,13 @@ let viewBlog = async (ctx, next) => {
 
     await new Promise((resolve) => {
 
-        if(ctx.session.date){
+        if(ctx.session.blogId == blogInfo.id){
             resolve('pvOk');
         }else{
             let pv = blogInfo.blogPv;
 
             pv++;
-            ctx.session.date = Common.getToday();
+            ctx.session.blogId = blogInfo._id;
 
             Blog.update({_id: blogInfo._id}, {blogPv: pv}, function (err, res) {
                 if (err) {
