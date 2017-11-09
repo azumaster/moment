@@ -24,6 +24,25 @@ let getUserList = async (ctx, next) => {
     ctx.response.body = response;
 };
 
+// 添加新用户
+let addUser = async (ctx, next) => {
+    let data = ctx.request.body;
+
+    let user = new User({userMobile: data.mobile, userPwd: data.pwd, userType: data.type});
+
+    let newAdd = await new Promise((resolve)=>{
+        user.save(function (err, res) {
+            if(err){
+                console.log(err);
+            }else{
+                console.log('RES：'+res);
+            }
+        });
+    });
+
+    ctx.response.body = 'bbbbb';
+};
+
 // 发送验证码
 let sendVerify = async (ctx, next) => {
     let uId = ctx.session.user.userId,
@@ -229,6 +248,7 @@ let getCurrentLoginUser = async (uId)=>{
 
 module.exports = {
     'GET /user/getUserList': getUserList,
+    'POST /user/addUser': addUser,
     'POST /user/sendVerify': sendVerify,
     'POST /user/checkOldPwd': checkOldPwd,
     'POST /user/editUserBasic': editUserBasic,

@@ -27,6 +27,8 @@
 </template>
 
 <script>
+    import crypto from 'crypto';
+
     export default {
         name: 'userList',
         data () {
@@ -94,7 +96,17 @@
                     type = this.userBasic.data.type,
                     password = this.userBasic.data.password;
 
+                password = crypto.createHmac('sha1', 'azumar').update(password).digest().toString('base64');
 
+                this.$ajax({
+                    method: 'post',
+                    url: '/user/addUser',
+                    data: {mobile: mobile, type: type, pwd: password}
+                }).then(function (res) {
+                    console.log(res);
+                }).catch(function () {
+                    _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                });
             }
         },
         created: function(){
