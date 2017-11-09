@@ -8,7 +8,18 @@ let getDateTime = (dateTime)=>{
     return date+' '+time;
 };
 
+// 获取当天
+let getToday = ()=>{
+    let date = new Date(),
+        year = date.getFullYear(),
+        month = (date.getMonth()+1)<10?'0'+(date.getMonth()+1):date.getMonth()+1,
+        day = date.getDate()<10?'0'+date.getDate():date.getDate();
+
+    return year+month+day;
+};
+
 
 module.exports = {
-    getDateTime: getDateTime
+    getDateTime: getDateTime,
+    getToday: getToday
 };

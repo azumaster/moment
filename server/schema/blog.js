@@ -6,6 +6,7 @@ const BlogSchema = new Schema({
     blogContent: {type: String},                        // 博客内容
     blogDes: {type: String},                           // 博客概述
     blogCover: {type: String},                          // 博客封面
+    blogPv: {type: Number, default: 0},                 // 点击量
     user: {type: Schema.ObjectId, ref: 'User' },      // 关联的用户id
     type: {type: Schema.ObjectId, ref: 'Type'}        // 关联的分类id
 }, {

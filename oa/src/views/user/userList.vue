@@ -72,6 +72,7 @@
             };
         },
         methods: {
+            // 获取成员名单
             getUserList: function () {
                 let _this = this;
 
@@ -91,10 +92,13 @@
                     _this.$Loading.error();
                 });
             },
+            // 确认添加新成员
             confirmAdd: function () {
                 let mobile = this.userBasic.data.mobile,
                     type = this.userBasic.data.type,
                     password = this.userBasic.data.password;
+
+                let _this = this;
 
                 password = crypto.createHmac('sha1', 'azumar').update(password).digest().toString('base64');
 
@@ -103,7 +107,12 @@
                     url: '/user/addUser',
                     data: {mobile: mobile, type: type, pwd: password}
                 }).then(function (res) {
-                    console.log(res);
+                    if(res.data.code == 0){
+                        _this.$Message.success(res.message);
+                        _this.getUserList();
+                    }else{
+                        _this.$Message.error(res.message);
+                    }
                 }).catch(function () {
                     _this.$Message.error('小Mo开小差去了，请稍后再试~');
                 });

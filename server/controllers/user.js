@@ -10,17 +10,19 @@ let getUserList = async (ctx, next) => {
     let response = await new Promise((resolve, reject)=>{
         User.find({}, (err, res)=>{
             if(err){
-                reject({code: 102, message: err});
+                resolve({code: 102, message: err});
             }else{
                 let userList = [];
                 res.map((user)=>{
-                    userList.push({userId: user._id, userName: user.userName, userMobile: user.userMobile, userType: user.userType, createdAt: user.createdAt, userHead: user.userHead})
+                    userList.push({userId: user._id, userName: user.userName, userMobile: user.userMobile, userType: user.userType, createdAt: common.getDateTime(user.createdAt), userHead: user.userHead})
                 });
 
                 resolve({code: 0, message: '', data: {list: userList}})
             }
         });
     });
+
+
     ctx.response.body = response;
 };
 
@@ -28,19 +30,19 @@ let getUserList = async (ctx, next) => {
 let addUser = async (ctx, next) => {
     let data = ctx.request.body;
 
-    let user = new User({userMobile: data.mobile, userPwd: data.pwd, userType: data.type});
+    let user = new User({userName: data.mobile, userMobile: data.mobile, userPwd: data.pwd, userType: data.type});
 
     let newAdd = await new Promise((resolve)=>{
         user.save(function (err, res) {
             if(err){
-                console.log(err);
+                resolve({code: 102, message: err});
             }else{
-                console.log('RES：'+res);
+                resolve({code: 0, message: '添加成功'});
             }
         });
     });
 
-    ctx.response.body = 'bbbbb';
+    ctx.response.body = newAdd;
 };
 
 // 发送验证码
