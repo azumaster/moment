@@ -43,7 +43,7 @@ let getBlogList = async (ctx, next) => {
     let blogList = await new Promise((resolve) => {
 
         Blog.find(where, null, {skip: skip, limit: size})
-            .sort({updatedAt: -1})
+            .sort({createdAt: -1})
             .populate('user').populate('type').exec(function (err, res) {
             if (err) {
                 resolve({code: 0, message: err.message, data: {current: page, blogList: []}});
@@ -94,6 +94,7 @@ let viewBlog = async (ctx, next) => {
                 let blogInfo = {
                     _id: res._id,
                     blogContent: res.blogContent,
+                    blogDes: res.blogDes,
                     blogTitle: res.blogTitle,
                     blogUser: res.user,
                     blogType: res.type,
