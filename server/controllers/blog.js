@@ -33,13 +33,21 @@ let getTypeList = async (ctx, next) => {
           }else{
             let typeList = [];
             res.map((type)=>{
-              typeList.push({
-                name: type.typeName,
-                des: type.typeDes,
-                _id: type._id,
-                createdAt: Common.getDateTime(type.createdAt),
-                updatedAt: Common.getDateTime(type.updatedAt)
-              });
+
+                let typeListInfo = {
+                    name: type.typeName,
+                    des: type.typeDes,
+                    _id: type._id,
+                    createdAt: Common.getDateTime(type.createdAt),
+                    updatedAt: Common.getDateTime(type.updatedAt)
+                };
+
+                if(type.typeName != '默认'){
+                    typeList.push(typeListInfo);
+                } else {
+                    typeList.unshift(typeListInfo);
+                }
+
             });
 
             resolve({code: 0, message: '', data: typeList});
@@ -86,6 +94,50 @@ let editType = async (ctx, next) => {
     ctx.response.body = typeRes;
 };
 
+// 删除文章分类
+let delTypeById = async (ctx, next) => {
+    const typeId = ctx.request.body.id;
+
+    // 查询有这个分类的博客
+    let blogs = await new Promise( resolve => {
+        Blog.find({type: typeId}, (err, res)=>{
+            if(err) resolve({code: 102, message: err});
+            else resolve(res);
+        });
+    });
+
+    let defaultTypeId = await new Promise( resolve => {
+        Type.findOne({typeName: '默认'}, (err, res)=>{
+            if(err) reject({code: 102, message: err});
+            else resolve(res._id);
+        });
+    });
+
+    // 将这些博客的分类设置成默认
+    await new Promise( resolve => {
+        if(blogs.length>0){
+            blogs.map((blog, index)=>{
+                Blog.update({_id: blog._id}, {$set : {type : defaultTypeId}}, (err, res)=>{
+                    if(err) reject({code: 102, message: err});
+                    else resolve(res);
+                });
+            });
+        }else {
+            resolve('ok');
+        }
+
+    });
+
+    let removeType = await new Promise( resolve => {
+        Type.remove({_id: typeId}, (err, res)=>{
+            if(err) resolve({code: 102, message: err});
+            else resolve({code: 0, message: 'ok'});
+        });
+    });
+
+    ctx.response.body = removeType;
+};
+
 
 // 添加新文章
 let addBlog = async (ctx, next) => {
@@ -113,7 +165,8 @@ let addBlog = async (ctx, next) => {
 
 // 获取文章列表
 let getBlogList = async (ctx, next)=>{
-    let page = parseInt(ctx.query.page),
+    let blogStatus = ctx.query.blogStatus,
+        page = parseInt(ctx.query.page),
         size = parseInt(ctx.query.size),
         skip = size*(page-1);
 
@@ -122,6 +175,7 @@ let getBlogList = async (ctx, next)=>{
     let blogList = await new Promise((resolve)=>{
         let where = {};
         if(type) where.type = type;
+        if(blogStatus) where.blogStatus = blogStatus;
 
         Blog.find(where, null, {skip: skip, limit: size})
             .sort({updatedAt: -1})
@@ -136,6 +190,8 @@ let getBlogList = async (ctx, next)=>{
                             blogTitle: blog.blogTitle,
                             blogContent: blog.blogContent,
                             blogDes: blog.blogDes,
+                            blogPv: blog.blogPv,
+                            blogStatus: blog.blogStatus,
                             createdAt: Common.getDateTime(blog.createdAt),
                             updatedAt: Common.getDateTime(blog.updatedAt),
                             blogCover: blog.blogCover,
@@ -164,11 +220,59 @@ let getBlogList = async (ctx, next)=>{
     ctx.response.body = blogList;
 };
 
+// 根据id获得文章
+let getBlogById = async (ctx, next)=>{
+    let id = ctx.query.id;
+
+    let blog = await new Promise((resolve)=>{
+        Blog.findById(id, function (err, res) {
+            if (err) {
+                reject({code: 102, message: err});
+            } else {
+                let blogInfo = {
+                    _id: res._id,
+                    blogContent: res.blogContent,
+                    blogDes: res.blogDes,
+                    blogTitle: res.blogTitle,
+                    blogUser: res.user,
+                    blogType: res.type,
+                    blogPv: res.blogPv?res.blogPv:0,
+                    createdAt: Common.getDateTime(res.createdAt).split(' ')[0],
+                    updatedAt: Common.getDateTime(res.updatedAt).split(' ')[0]
+                };
+
+                resolve({code: 0, message: '', data: blogInfo});
+            }
+        });
+    });
+
+    ctx.response.body = blog;
+};
+
+// 改变文章状态
+let changeBlogStatus = async (ctx, next)=>{
+    const id = ctx.request.body.id,
+        status = ctx.request.body.status;
+
+    let changeStatus = await new Promise( resolve => {
+        Blog.update({_id: id}, {$set : {blogStatus : status}}, (err, res)=>{
+            if(err) resolve({code: 102, message: err});
+            else resolve({code: 0, message: 'ok'});
+        });
+    });
+
+    ctx.response.body = changeStatus;
+
+};
+
 module.exports = {
     'POST /blog/type/add': addType,
     'POST /blog/type/edit': editType,
     'GET /blog/type/list': getTypeList,
     'GET /blog/type/one': getTypeById,
+    'POST /blog/type/del': delTypeById,
     'POST /blog/add': addBlog,
-    'GET /blog/list': getBlogList
+    'GET /blog/list': getBlogList,
+    'GET /blog/getBlogById': getBlogById,
+    'POST /blog/blogStatus': changeBlogStatus
 };

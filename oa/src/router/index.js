@@ -1,18 +1,19 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Home from './../views/home/home.vue';
-import EditMe from './../views/home/editUser.vue';
+const Home = resolve => require.ensure([], () => {return resolve(require('./../views/home/home.vue'));}, 'home');
+const EditMe = resolve => require.ensure([], () => {return resolve(require('./../views/home/editUser.vue'));}, 'home');
 
-import User from './../views/user/user.vue';
-import UserList from './../views/user/userList.vue';
+const User = resolve => require.ensure([], () => {return resolve(require('./../views/user/user.vue'));}, 'user');
+const UserList = resolve => require.ensure([], () => {return resolve(require('./../views/user/userList.vue'));}, 'user');
 
-import Blog from './../views/blog/blog.vue';
-import BlogList from './../views/blog/blogList.vue';
-import AddBlog from './../views/blog/addBlog.vue';
+const Blog = resolve => require.ensure([], () => {return resolve(require('./../views/blog/blog.vue'));}, 'blog');
+const BlogList = resolve => require.ensure([], () => {return resolve(require('./../views/blog/blogList.vue'));}, 'blog');
+const AddBlog = resolve => require.ensure([], () => {return resolve(require('./../views/blog/addBlog.vue'));}, 'blog');
+const ShowBlog = resolve => require.ensure([], () => {return resolve(require('./../views/blog/showBlog.vue'));}, 'blog');
 
-import Type from './../views/blog/type.vue';
-import TypeList from './../views/blog/typeList.vue';
+const Type = resolve => require.ensure([], () => {return resolve(require('./../views/blog/type.vue'));}, 'type');
+const TypeList = resolve => require.ensure([], () => {return resolve(require('./../views/blog/typeList.vue'));}, 'type');
 
 Vue.use(Router);
 
@@ -24,7 +25,7 @@ export default new Router({
             {path: '', component: UserList}, {path: 'editMe', component: EditMe}
         ]},
         {path: '/blogList', component: Blog, children: [
-            {path: '', component: BlogList}, {path: 'addBlog', component: AddBlog}
+            {path: '', component: BlogList}, {path: 'addBlog', component: AddBlog}, {path: 'showBlog/:id', component: ShowBlog}
         ]},
         {path: '/blogType', component: Type, children: [
             {path: '', component: TypeList}

@@ -4,12 +4,13 @@ var path = require('path'),
 module.exports = {
     entry: {
         moment: ['./src/common/common.js', './src/main.js'],
-        'momentAssets': ['vue', 'iview']
+        'momentAssets': ['vue', 'iview', 'axios', 'vue-router', 'vuex']
     },
     output: {
         path: path.resolve(__dirname, './dist'),
         publicPath: '/dist/',
-        filename: '[name].js'
+        filename: '[name].js',
+        chunkFilename: '[name].js'
     },
     module: {
         rules: [
@@ -87,7 +88,7 @@ if (process.env.NODE_ENV === 'production') {
                 minimize: true
             }),
             new webpack.optimize.CommonsChunkPlugin({
-                name: 'moment',
+                name: 'momentAssets',
                 minChunks: Infinity
             })
         ]);

@@ -29,7 +29,6 @@
         name: 'typeList',
         components: { PageHead },
         data: function () {
-//            let _this = this;
             return {
                 showAdd: false,
                 showEdit: false,
@@ -38,15 +37,14 @@
                 typeList: [],
                 typeColumns: [{title: '文章分类名', key: 'name'}, {title: '文章分类描述', key: 'des'}, {title: '最近更新时间', key: 'updatedAt'}, {title: '操作', key: 'action',
                     render: (h, params) => {
-                        return h('div', [
-                            h('Button', { props: { type: 'primary', shape:'circle', icon: 'edit'}, style: { marginRight: '5px' }, on: { click: () => { this.showEditType(params.index);}}}, '编辑'),
-                            h('Button', { props: { type: 'error', shape:'circle', icon: 'ios-trash'}, style: { marginRight: '5px' },
-                                on: { click: () => {
-//                                            this.show(params.blogList)
-                                }
-                                }
-                            })
-                        ]);
+                        if(params.row.name == '默认') {
+                            return h('div', []);
+                        }else{
+                            return h('div', [
+                                h('Button', { props: { type: 'primary', shape:'circle', icon: 'edit'}, style: { marginRight: '5px' }, on: { click: () => { this.showEditType(params.index);}}}, '编辑'),
+                                h('Button', { props: { type: 'error', shape:'circle', icon: 'ios-trash'}, style: { marginRight: '5px' }, on: { click: () => {this.delType(params.index);}}})
+                            ]);
+                        }
                     }
                 }]
             };
@@ -135,8 +133,27 @@
                 }).catch(function () {
                     _this.$Message.error('小Mo开小差去了，请稍后再试~');
                 });
-            }
+            },
             // 删除分类信息
+            delType: function (id) {
+                let _this = this,
+                    _id = this.typeList[id]._id;
+
+                this.$ajax({
+                    method: 'post',
+                    url: '/blog/type/del',
+                    data: {id: _id}
+                }).then(function (res) {
+                    if(res.data.code == 0){
+                        _this.getTypeList();
+                    }else{
+                        _this.$Message.error(res.data.message);
+                    }
+                }).catch(function () {
+                    _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                });
+
+            }
         },
         created: function () {
             this.getTypeList();

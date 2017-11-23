@@ -1,7 +1,7 @@
 <template>
     <Row>
         <i-col span="5">
-            <Menu active-name="home" @on-select="changeMenu">
+            <Menu :active-name="activeName" @on-select="changeMenu">
                 <MenuGroup >
                     <MenuItem name="home"><Icon type="planet"></Icon>首页</MenuItem>
                 </MenuGroup>
@@ -26,6 +26,7 @@
         data: function () {
             return {
                 user: {},
+                activeName: 'home',
                 showSection: true
             };
         },
@@ -58,6 +59,11 @@
             getUser (val) {
                 this.user = val;
             }
+        },
+        updated: function () {
+            let fullPath = this.$route.fullPath.slice(1, this.$route.fullPath.length);
+
+            this.activeName = fullPath;
         }
     };
 </script>

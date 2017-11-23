@@ -1,6 +1,6 @@
 <template>
     <div id="addBlog">
-        <PageHead title="添加新文章"></PageHead>
+        <PageHead title="添加新文章" isBack="true"></PageHead>
         <div class="page-filter">
             <Row type="flex" justify="space-between">
                 <i-col span="10">
@@ -9,7 +9,7 @@
                             <Input v-model="blogForm.title" maxlength="150" placeholder="请输入文章标题"></Input>
                         </FormItem>
                         <FormItem label="文章分类">
-                            <Select v-model="blogForm.category" placeholder="请选择文章分类">
+                            <Select label="默认" v-model="blogForm.category" placeholder="请选择文章分类">
                                 <Option v-for="type in typeList" :value="type._id">{{type.name}}</Option>
                             </Select>
                         </FormItem>
@@ -83,7 +83,20 @@
                     url: '/blog/type/list'
                 }).then(function (res) {
                     if(res.data.code == 0){
-                        _this.typeList = res.data.data;
+                        let typeList = res.data.data,
+                            list = [];
+
+                        if(typeList.length>1){
+                            typeList.map((type)=>{
+                                if(type.name != '默认'){
+                                    list.push(type);
+                                }
+                            });
+                        }else{
+                            list = typeList;
+                        }
+
+                        _this.typeList = list;
                     }else{
                         _this.$Message.error(res.data.message);
                     }
@@ -113,7 +126,7 @@
                         let data = {
                             title: _this.blogForm.title,
                             type: _this.blogForm.category,
-                            content: _this.simple.value(),
+                            content: _this.simple.markdown(_this.simple.value()),
                             des: _this.blogForm.des
                         };
 
@@ -173,7 +186,16 @@
             this.getBlogType();
         },
         mounted: function () {
-            this.simple = new SimpleMDE({element: document.getElementById('mde')});
+            this.simple = new SimpleMDE({
+                toolbar: [
+                    'bold', 'italic', 'strikethrough', '|',
+                    'heading-1', 'heading-2', 'heading-3', '|',
+                    'horizontal-rule', 'quote', 'unordered-list', 'ordered-list', 'clean-block',  '|',
+                    'image', 'link', 'code', 'table', '|',
+                    'preview', 'side-by-side', 'fullscreen', 'guide'
+                ],
+                element: document.getElementById('mde')
+            });
         }
     };
 </script>
