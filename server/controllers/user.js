@@ -40,7 +40,6 @@ let getUserList = async (ctx, next) => {
         });
     });
 
-
     ctx.response.body = response;
 };
 
