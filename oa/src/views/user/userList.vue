@@ -5,7 +5,7 @@
         </div>
         <div class="page-table">
             <Table border :columns="userColumn" :data="userList"></Table>
-            <Page class="page-paging" :total="100"></Page>
+            <Page style="margin:20px 0;" :total="paging.total" :current="paging.current" :page-size="params.size" @on-change="changePage"></Page>
         </div>
         <Modal v-model="showAdd" title="添加新用户" @on-ok="confirmAdd">
             <Form :model="formItem" :label-width="80">
@@ -33,30 +33,20 @@
         name: 'userList',
         data () {
             return {
-                userColumn: [{title: '姓名', key: 'userName'}, {title: '注册手机号码', key: 'userMobile'}, {title: '角色', key: 'userType'},
-                    {title: '创建时间', key: 'createdAt'}, {title: '操作', key: 'action',
-                        render: (h) => {
-                            return h('div', [
-                                h('Button', { props: { type: 'text', size: 'small'},
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-//                                            this.show(params.blogList)
-                                        }
-                                    }
-                                }, '修改'),
-                                h('Button', {
-                                    props: { type: 'text', size: 'small'},
-                                    on: {
-                                        click: () => {
-//                                            this.remove(params.blogList)
-                                        }
-                                    }
-                                }, '拉黑')
-                            ]);
-                        }}],
+                params: {page: 1, size: 20},
+                paging: {current: 1, total: 0},
+                userColumn: [{title: '姓名', key: 'userName'}, {title: '注册手机号码', key: 'userMobile'}, {title: '角色', key: 'userRole'},
+                    {title: '创建时间', key: 'createdAt'}, {title: '操作', key: 'action', render: (h, params) => {
+                        console.log(params);
+                        let btns = [];
+
+                        btns = [
+                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {}}}, '编辑'),
+                            h('Button', {props: {type: 'error', size: 'small'}, on: {click: () => {}}}, '拉黑')
+                        ];
+
+                        return h('div', btns);
+                    }}],
                 userList: [],
                 showAdd: false,
                 userBasic: {
@@ -79,10 +69,20 @@
                 this.$Loading.start();
                 this.$ajax({
                     method: 'get',
-                    url: '/user/getUserList'
+                    url: '/user/getUserList',
+                    params: _this.params
                 }).then(function (res) {
                     if(res.data.code == 0){
-                        _this.userList = res.data.data.list;
+                        let roles = ['0', '超级管理员', '部门管理员', '专员'],
+                            list = res.data.data.list;
+                        list.map((user)=>{
+                            user.userRole = roles[user.userType];
+                        });
+
+
+                        _this.userList = list;
+                        _this.paging.current = res.data.data.current;
+                        _this.paging.total = res.data.data.total;
                     }else{
                         _this.$Message.error(res.data.message);
                     }

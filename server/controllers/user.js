@@ -6,9 +6,13 @@ const Verify = require('./../schema/verify.js');
 
 // 获取用户列表
 let getUserList = async (ctx, next) => {
+    let page = parseInt(ctx.query.page),
+        size = parseInt(ctx.query.size),
+        skip = size*(page-1);
 
     let response = await new Promise((resolve, reject)=>{
-        User.find({}, (err, res)=>{
+
+        User.find({}, null, {skip: skip, limit: size}).sort({createdAt: 1}).exec((err, res)=>{
             if(err){
                 resolve({code: 102, message: err});
             }else{
@@ -17,7 +21,21 @@ let getUserList = async (ctx, next) => {
                     userList.push({userId: user._id, userName: user.userName, userMobile: user.userMobile, userType: user.userType, createdAt: common.getDateTime(user.createdAt), userHead: user.userHead})
                 });
 
-                resolve({code: 0, message: '', data: {list: userList}})
+                resolve({code: 0, message: '', data: {list: userList, current: page }})
+            }
+        });
+    });
+
+    await new Promise((resolve, reject)=>{
+        User.count({}, function (err, res) {
+
+            if(err){
+                resolve({code: 102, message: err.message});
+            }else{
+                if(response.data.list.length>0) response.data.total = res;
+                else response.data.total = 0;
+                response.data.lastPage = Math.ceil(response.data.total/size);
+                resolve('ok');
             }
         });
     });

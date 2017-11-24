@@ -178,7 +178,7 @@ let getBlogList = async (ctx, next)=>{
         if(blogStatus) where.blogStatus = blogStatus;
 
         Blog.find(where, null, {skip: skip, limit: size})
-            .sort({updatedAt: -1})
+            .sort({createdAt: -1})
             .populate('user').populate('type').exec(function(err, res){
                 if(err){
                     resolve({code: 0, message: err.message, data: {current: page, blogList: []}});

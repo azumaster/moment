@@ -103,19 +103,24 @@
                     _this.$Loading.error();
                 });
             },
+            // 添加新文章
             addBlog: function () {
                 window.location.href = '/#/blogList/addBlog';
             },
+            // 改变分页
             changePage: function (page) {
                 this.params.page = page;
                 this.getBlogList();
             },
+            // 编辑文章
             edit: function () {
             },
+            // 查看文章
             show: function (index) {
                 let id = this.blogList[index]._id;
                 this.$router.push('/blogList/showBlog/'+id);
             },
+            // 改变文章状态
             changeStatus: function (index, status) {
                 const id = this.blogList[index]._id,
                     _this = this;

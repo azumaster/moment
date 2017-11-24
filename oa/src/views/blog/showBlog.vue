@@ -1,9 +1,7 @@
 <template>
     <div id="showBlog">
-        <pageHead title="查看文章详情" isBack="true"></pageHead>
-        <h1>{{ blog.blogTitle?blog.blogTitle:''}}</h1>
+        <pageHead :title="blog.blogTitle" isBack="true"></pageHead>
         <div id="blogContent" class="blog-content" v-html="blog.blogContent"></div>
-
     </div>
 </template>
 
@@ -16,7 +14,7 @@
         data: function () {
             return {
                 blogId: '',
-                blog: null
+                blog: {}
             };
         },
         methods: {
@@ -31,8 +29,6 @@
                 }).then(function (res) {
                     if(res.data.code == 0){
                         let blog = res.data.data;
-
-                        console.log(blog);
 
                         _this.blog = blog;
                         _this.$Loading.finish();

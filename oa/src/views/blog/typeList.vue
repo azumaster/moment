@@ -37,14 +37,17 @@
                 typeList: [],
                 typeColumns: [{title: '文章分类名', key: 'name'}, {title: '文章分类描述', key: 'des'}, {title: '最近更新时间', key: 'updatedAt'}, {title: '操作', key: 'action',
                     render: (h, params) => {
-                        if(params.row.name == '默认') {
-                            return h('div', []);
-                        }else{
-                            return h('div', [
-                                h('Button', { props: { type: 'primary', shape:'circle', icon: 'edit'}, style: { marginRight: '5px' }, on: { click: () => { this.showEditType(params.index);}}}, '编辑'),
-                                h('Button', { props: { type: 'error', shape:'circle', icon: 'ios-trash'}, style: { marginRight: '5px' }, on: { click: () => {this.delType(params.index);}}})
-                            ]);
+
+                        let btns = [];
+
+                        if(params.row.name != '默认') {
+                            btns = [
+                                h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.showEditType(params.index);}}}, '编辑'),
+                                h('Button', {props: {type: 'error', size: 'small'}, on: {click: () => {this.delType(params.index, 0);}}}, '删除')
+                            ];
                         }
+
+                        return h('div', btns);
                     }
                 }]
             };
