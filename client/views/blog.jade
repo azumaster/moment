@@ -53,11 +53,12 @@ html
 
     script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
     script(src="https://cdn.bootcss.com/marked/0.3.6/marked.min.js")
-    script(src="/js/highlight.js")
+    script(src="/js/common.js")
     script.
       (function () {
           translateHtml();
           initView();
+          $('#headerNav').find('li').eq(0).addClass('active');
       })();
 
 

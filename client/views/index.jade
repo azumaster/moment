@@ -71,6 +71,7 @@ html
         include components/up
 
     script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
+    script(src="/js/common.js")
     script.
         // 根据分类id加载内容
         function loadCategory(obj) {
@@ -112,7 +113,7 @@ html
                                 '<div class="blog-detail">' +
                                 '<div class="blog-cover"><a href="/blog/' + item._id + '"><img src="' + item.blogCover + '"></a></div>' +
                                 '<div class="blog-title"><h1><a href="/blog/' + item._id + '">' + item.blogTitle + '</a></h1><p>' + item.blogDes + '</p></div>' +
-                                '<div class="blog-oper"><a href="/blog/+' + item._id + '">点此查看全文 <span class="icon right"></span></a></div>' +
+                                '<div class="blog-oper"><a href="/blog/' + item._id + '">点此查看全文 <span class="icon right"></span></a></div>' +
                                 '</div></li>';
                         }
 
@@ -133,4 +134,5 @@ html
 
         (function () {
             $('#pageLeft').css({'min-height': (window.innerHeight-280) + 'px'});
+            $('#headerNav').find('li').eq(0).addClass('active');
         })();
