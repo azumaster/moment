@@ -28,25 +28,33 @@ let login = async (ctx, next) => {
     let mobile = ctx.request.body.mobile,
         pwd = ctx.request.body.pwd;
 
-    await new Promise((resolve, reject) => {
-        User.find({userMobile: mobile, userPwd: pwd}, (err, res)=>{
+    await new Promise((resolve) => {
+        User.findOne({userMobile: mobile, userPwd: pwd}, (err, res)=>{
             if(err) {
-                ctx.response.body = { code: 103, message: err};
-                reject(err);
+                ctx.response.body = { code: 102, message: err};
+                resolve(err);
             } else {
-                if(res[0]){
-                    let user = {
-                        userId: res[0]._id,
-                        userName: common.unary(res[0].userName, res[0].userMobile),
-                        userMobile: common.unary(res[0].userMobile, '10000000000'),
-                        userHead: common.unary(res[0].userHead, ''),
-                        userType: common.unary(res[0].userType, 3)
-                    };
+                if(res){
 
-                    ctx.session.user = user;
-                    ctx.response.body = { code: 0, message: '登录成功', data: user};
+                    if(res.userStatus == 1){
+                        let user = {
+                            userId: res._id,
+                            userName: common.unary(res.userName, res.userMobile),
+                            userMobile: common.unary(res.userMobile, '10000000000'),
+                            userHead: common.unary(res.userHead, ''),
+                            userType: common.unary(res.userType, 3),
+                            userStatus: common.unary(res.userStatus, 0)
+                        };
+
+                        ctx.session.user = user;
+                        ctx.response.body = { code: 0, message: '登录成功', data: user};
+                    } else if(res.userStatus == 2) {
+                        ctx.response.body = { code: 202, message: '您已被管理员限制登录本系统，如有疑问，请联系系统管理员。'};
+                    }
+
+
                 }else{
-                    ctx.response.body = { code: 101, message: '用户名或密码错误，请重试~', data: []};
+                    ctx.response.body = { code: 201, message: '用户名或密码错误，请重试~', data: []};
                 }
                 resolve('OK');
             }

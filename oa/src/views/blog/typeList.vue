@@ -37,16 +37,20 @@
                 typeList: [],
                 typeColumns: [{title: '文章分类名', key: 'name'}, {title: '文章分类描述', key: 'des'}, {title: '最近更新时间', key: 'updatedAt'}, {title: '操作', key: 'action',
                     render: (h, params) => {
-
                         let btns = [];
-
                         if(params.row.name != '默认') {
-                            btns = [
-                                h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.showEditType(params.index);}}}, '编辑'),
-                                h('Button', {props: {type: 'error', size: 'small'}, on: {click: () => {this.delType(params.index, 0);}}}, '删除')
-                            ];
-                        }
 
+                            if(this.$store.state.user.userType == 1){
+                                btns = [
+                                    h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.showEditType(params.index);}}}, '编辑'),
+                                    h('Button', {props: {type: 'error', size: 'small'}, on: {click: () => {this.delType(params.index, 0);}}}, '删除')
+                                ];
+                            } else {
+                                btns = [
+                                    h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.showEditType(params.index);}}}, '编辑')
+                                ];
+                            }
+                        }
                         return h('div', btns);
                     }
                 }]
@@ -140,22 +144,31 @@
             // 删除分类信息
             delType: function (id) {
                 let _this = this,
-                    _id = this.typeList[id]._id;
+                    _id = this.typeList[id]._id,
+                    typeName = this.typeList[id].name;
 
-                this.$ajax({
-                    method: 'post',
-                    url: '/blog/type/del',
-                    data: {id: _id}
-                }).then(function (res) {
-                    if(res.data.code == 0){
-                        _this.getTypeList();
-                    }else{
-                        _this.$Message.error(res.data.message);
+                this.$Modal.confirm({
+                    title: '确认删除？',
+                    content: '你确认要删除 ['+typeName+'] 吗?删除分类后，该分类下的所有文章将会被重置为默认分类。',
+                    okText: '删除',
+                    loading: true,
+                    onOk: function () {
+                        this.$ajax({
+                            method: 'post',
+                            url: '/blog/type/del',
+                            data: {id: _id}
+                        }).then(function (res) {
+                            if(res.data.code == 0){
+                                _this.getTypeList();
+                            }else{
+                                _this.$Message.error(res.data.message);
+                            }
+                        }).catch(function () {
+                            _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                        });
+                        _this.$Modal.remove();
                     }
-                }).catch(function () {
-                    _this.$Message.error('小Mo开小差去了，请稍后再试~');
                 });
-
             }
         },
         created: function () {

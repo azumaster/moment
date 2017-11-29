@@ -2,20 +2,19 @@ doctype html
 html
     head
         meta(charset="utf-8")
-        title #{blog.data.blogTitle} - 红西柚
+        title #{blog.data.blogTitle} - #{blog.data.blogType} - 红西柚
         meta(name="keywords", content="前端,红西柚,html5,react,javascript,js,es,vue,doden,azumar")
         meta(name="author", content="#{blog.data.blogUser}")
         meta(name="description", content="#{blog.data.blogDes}")
         link(rel="stylesheet", href='/css/reset.css')
-        link(rel="stylesheet", href='/css/highlight.css')
-        link(rel="stylesheet", href='/css/marked.css')
+        link(rel="stylesheet", href='/css/markdown.css')
         link(rel="stylesheet", href='/css/style.css')
         link(rel="short icon", href='/img/favicon.ico')
     body
         include components/header
 
         main.page-main
-            section.page-left
+            section#pageLeft.page-left
                 div.blog-inner
                     div.blog-title
                         h1 #{blog.data.blogTitle}
@@ -30,7 +29,7 @@ html
                             span
                                 i.icon.category
                                 span #{blog.data.blogType}
-                    div.blog-content#blogContent #{blog.data.blogContent}
+                    div.blog-content.markdown-body#blogContent #{blog.data.blogContent}
                     div.blog-content-end （完）
                     div.blog-oper
             section.page-right
@@ -50,25 +49,34 @@ html
                                 span.icon.right
 
         include components/footer
+        include components/up
 
     script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
     script(src="https://cdn.bootcss.com/marked/0.3.6/marked.min.js")
     script(src="/js/highlight.js")
     script.
       (function () {
-        translateHtml();
+          translateHtml();
+          initView();
       })();
 
+
+      // 解析MarkDown
       function translateHtml () {
-        hljs.initHighlightingOnLoad();
         var dom = document.getElementById('blogContent');
-        dom.innerHTML = marked(dom.innerHTML);
+        var htmlStr = marked(dom.innerHTML);
+        htmlStr = htmlStr.replace(/&amp;gt;/g, '>');
+        htmlStr = htmlStr.replace(/&amp;lt;/g, '< ');
+        dom.innerHTML = htmlStr;
+      }
+
+      // 初始化View
+      function initView() {
+          $('#pageLeft').css({'min-height': (window.innerHeight - 280) + 'px'});
       }
 
       function loadCategory(obj) {
-          if(obj){
-              localStorage.setItem('categoryId', obj.children[0].innerText)
-          }
-
-          window.location.href = '/';
+          var id = '';
+          if (obj) id = $(obj).find('.typeId').html();
+          window.location.href = '/' + id;
       }

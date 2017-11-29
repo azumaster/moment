@@ -1,6 +1,6 @@
 <template>
-    <div id="addBlog">
-        <PageHead title="添加新文章" isBack="true"></PageHead>
+    <div id="editBlog">
+        <PageHead title="编辑文章" isBack="true"></PageHead>
         <div class="page-filter">
             <Row type="flex" justify="space-between">
                 <i-col span="10">
@@ -10,7 +10,7 @@
                         </FormItem>
                         <FormItem label="文章分类">
                             <Select label="默认" v-model="blogForm.category" placeholder="请选择文章分类">
-                                <Option v-for="type in typeList" :value="type._id">{{type.name}}</Option>
+                                <Option v-for="type in typeList" :value="type._id" :key="type._id">{{type.name}}</Option>
                             </Select>
                         </FormItem>
                         <FormItem label="文章概述">
@@ -26,8 +26,7 @@
                                     <p>点击或将文件拖拽到这里上传</p>
                                 </div>
                             </Upload>
-                            <Alert type="warning" show-icon style="margin-top: 20px;">推荐使用 500 * 250 分辨率的 .jpg 后缀的图片；图片大小不得超过2M。
-                            </Alert>
+                            <Alert type="warning" show-icon style="margin-top: 20px;">推荐使用 500 * 250 分辨率的 .jpg 后缀的图片；图片大小不得超过2M。</Alert>
                         </FormItem>
                     </Form>
                 </i-col>
@@ -46,7 +45,7 @@
             <textarea id="mde" ref="mde" cols="30" rows="20"></textarea>
         </div>
         <div class="page-footer">
-            <Button type="primary" @click="confirmPush" size="large" style="margin-right: 20px;">确定发布</Button>
+            <Button type="primary" @click="confirmPush" size="large" style="margin-right: 20px;">确定修改</Button>
             <Button size="large" @click="cancelPush">取消</Button>
         </div>
     </div>
@@ -63,6 +62,7 @@
         },
         data: function () {
             return {
+                currentBlog: {},
                 blogForm: {
                     title: '',
                     category: '',
@@ -74,6 +74,39 @@
             };
         },
         methods: {
+            // 获取当前文章
+            getCurrentBlog: function (id) {
+                const _this = this;
+
+                this.$Loading.start();
+                this.$ajax({
+                    method: 'get',
+                    url: '/blog/getBlogById',
+                    params: {id: id}
+                }).then(function (res) {
+                    if(res.data.code == 0){
+                        _this.currentBlog = res.data.data;
+                        _this.blogForm = {
+                            title: res.data.data.blogTitle,
+                            category: res.data.data.blogType.id,
+                            des: res.data.data.blogDes
+                        };
+
+                        _this.simple.value(res.data.data.blogContent);
+
+                        if(res.data.data.blogCover){
+                            _this.imgUrl = res.data.data.blogCover;
+                        }
+                        _this.$Loading.finish();
+                    }else{
+                        _this.$Message.error(res.data.message);
+                        _this.$Loading.error();
+                    }
+                }).catch(function () {
+                    _this.$Message.error('小Mo开小差去了，请稍后再试~');
+                    _this.$Loading.error();
+                });
+            },
             // 获取文章类型
             getBlogType: function () {
                 let _this = this;
@@ -107,9 +140,9 @@
             // 取消发布文章
             cancelPush: function () {
                 this.$Modal.confirm({
-                    title: '取消发布文章',
+                    title: '取消修改文章',
                     content: '确定离开本页面，放弃已编辑好的文章？',
-                    okText: '取消发布',
+                    okText: '取消修改',
                     onOk: function () {
                         window.location.href = '/#/blogList';
                     }
@@ -119,11 +152,12 @@
             confirmPush: function () {
                 let _this = this;
                 this.$Modal.confirm({
-                    title: '确认发布文章',
-                    content: '确定你已经编辑好文章，可以发布了吗？',
-                    okText: '确认发布',
+                    title: '确认修改文章',
+                    content: '确定你已经重新编辑好文章？修改后，文章需重新经过系统管理员审核后方能显示在前台。',
+                    okText: '确认修改',
                     onOk: function () {
                         let data = {
+                            id: _this.$route.params.id,
                             title: _this.blogForm.title,
                             type: _this.blogForm.category,
                             content: _this.simple.value(),
@@ -136,11 +170,11 @@
 
                         this.$ajax({
                             method: 'post',
-                            url: '/blog/add',
+                            url: '/blog/edit',
                             data: data
                         }).then(function (res) {
                             if(res.data.code == 0){
-                                _this.$Message.success('您已添加了新的文章~');
+                                _this.$Message.success('您已修改了本篇文章~');
                                 window.location.href = '/#/blogList';
                             }else{
                                 _this.$Message.error(res.data.message);
@@ -167,6 +201,7 @@
                 this.$Message.error(event.message);
               }
             },
+            // 控制图片上传大小
             handleSize: function (file) {
               this.$Notice.warning({
                 title: '红西柚悄悄告诉你',
@@ -174,6 +209,7 @@
               });
               this.$Message.destroy();
             },
+            // 控制图片上传格式
             handleFormat: function () {
               this.$Notice.warning({
                 title: '红西柚悄悄告诉你',
@@ -183,6 +219,7 @@
             }
         },
         created: function () {
+            this.getCurrentBlog(this.$route.params.id);
             this.getBlogType();
         },
         mounted: function () {

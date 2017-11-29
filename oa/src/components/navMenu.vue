@@ -64,7 +64,11 @@
             let fullPath = this.$route.fullPath.slice(1, this.$route.fullPath.length),
                 activeName = fullPath.split('/')[0];
 
-            this.activeName = activeName;
+            if(activeName == '' || !activeName){
+                this.activeName = 'home';
+            }else {
+                this.activeName = activeName;
+            }
         }
     };
 </script>

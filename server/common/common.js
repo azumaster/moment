@@ -63,8 +63,7 @@ let configUpload = multer.diskStorage({
 // 随机6位数
 let randomSix = ()=>{
     let num="";
-    for(let i=0;i<6;i++)
-    {
+    for(let i=0;i<6;i++) {
         num+=Math.floor(Math.random()*10);
     }
 

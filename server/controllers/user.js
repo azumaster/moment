@@ -18,7 +18,15 @@ let getUserList = async (ctx, next) => {
             }else{
                 let userList = [];
                 res.map((user)=>{
-                    userList.push({userId: user._id, userName: user.userName, userMobile: user.userMobile, userType: user.userType, createdAt: common.getDateTime(user.createdAt), userHead: user.userHead})
+                    userList.push({
+                        userId: user._id,
+                        userName: user.userName,
+                        userMobile: user.userMobile,
+                        userType: user.userType,
+                        createdAt: common.getDateTime(user.createdAt),
+                        userHead: user.userHead,
+                        userStatus: user.userStatus
+                    });
                 });
 
                 resolve({code: 0, message: '', data: {list: userList, current: page }})
@@ -49,7 +57,7 @@ let addUser = async (ctx, next) => {
 
     let user = new User({userName: data.mobile, userMobile: data.mobile, userPwd: data.pwd, userType: data.type});
 
-    let newAdd = await new Promise((resolve)=>{
+    let newUser = await new Promise((resolve)=>{
         user.save(function (err, res) {
             if(err){
                 resolve({code: 102, message: err});
@@ -59,7 +67,28 @@ let addUser = async (ctx, next) => {
         });
     });
 
-    ctx.response.body = newAdd;
+    ctx.response.body = newUser;
+};
+
+// 编辑用户
+let editUser = async (ctx, next)=> {
+    let data = ctx.request.body,
+        where = {};
+    if(data.name) where.userName = data.name;
+    if(data.mobile) where.userMobile = data.mobile;
+    if(data.type) where.userType = data.type;
+    let editUserReason = await new Promise((resolve)=>{
+        User.update({_id: data.id}, where, function(err, res){
+            if (err) {
+                resolve({code: 102, message: err});
+            }
+            else {
+                resolve(getCurrentLoginUser(data.id));
+            }
+        });
+    });
+
+    ctx.response.body = editUserReason;
 };
 
 // 发送验证码
@@ -227,6 +256,7 @@ let editUserHead = async (ctx, next)=> {
     let img = ctx.request.body.img,
         uId = ctx.session.user.userId;
 
+    img = img.slice(1, img.length);
 
     let response = await new Promise((resolve, reject)=>{
         User.update({_id: uId}, {userHead: img}, function(err, res){
@@ -241,27 +271,44 @@ let editUserHead = async (ctx, next)=> {
     ctx.response.body = response;
 };
 
+// 修改用户状态
+let updateUserStatus = async (ctx, next)=> {
+    let id = ctx.request.body.id,
+        status = ctx.request.body.status;
+
+    let newStatus = await new Promise((resolve, reject)=>{
+        User.update({_id: id}, {userStatus: status}, function(err, res){
+            if(err){
+                resolve({code: 102, message: err});
+            }else {
+                resolve(getCurrentLoginUser(id));
+            }
+        });
+    });
+    ctx.response.body = newStatus;
+};
+
 // 获取当前登录用户的所有信息
 let getCurrentLoginUser = async (uId)=>{
 
     let currentLoginUser = await new Promise((resolve)=>{
-        User.find({_id: uId}).exec((err, res)=>{
+        User.findOne({_id: uId}).exec((err, res)=>{
             if(err) {
                 resolve({code: 102, message: err});
             } else {
                 let user = {
-                    userId: res[0]._id,
-                    userName: common.unary(res[0].userName, res[0].userMobile),
-                    userMobile: common.unary(res[0].userMobile, '10000000000'),
-                    userHead: common.unary(res[0].userHead, ''),
-                    userType: common.unary(res[0].userType, 3)
+                    userId: res._id,
+                    userName: common.unary(res.userName, res.userMobile),
+                    userMobile: common.unary(res.userMobile, '10000000000'),
+                    userHead: common.unary(res.userHead, ''),
+                    userType: common.unary(res.userType, 3),
+                    userStatus: common.unary(res.userStatus, 1)
                 };
 
                 resolve({code: 0, message:'更新成功', data: user});
             }
         });
     });
-
     return currentLoginUser;
 };
 
@@ -271,5 +318,7 @@ module.exports = {
     'POST /user/sendVerify': sendVerify,
     'POST /user/checkOldPwd': checkOldPwd,
     'POST /user/editUserBasic': editUserBasic,
-    'POST /user/editUserHead': editUserHead
+    'POST /user/editUserHead': editUserHead,
+    'POST /user/editUser': editUser,
+    'POST /user/updateUserStatus': updateUserStatus
 };

@@ -6,38 +6,86 @@ const User = require('./../schema/user.js');
 
 // 渲染首页
 let viewHome = async (ctx, next) => {
+
+    const crosImgUrl = '//'+ctx.request.header.host.split(':')[0]+':10366',
+        typeId = ctx.request.url.split('/')[1];
+    let where = {blogStatus: 0};
+    if(typeId)  where.type = typeId;
+
     // 获取分类列表
-    let typeList = await new Promise((resolve, reject) => {
-        Type.find({}).sort({'updatedAt': 'desc'}).exec(function (err, res) {
+    let typeList = await new Promise((resolve) => {
+        Type.find({}).sort({'createdAt': 'desc'}).exec(function (err, res) {
             if (err) {
-                reject({code: 102, message: err});
+                resolve(err);
             } else {
                 let typeList = [];
                 res.map((type) => {
-                    typeList.push({
-                        name: type.typeName,
-                        des: type.typeDes,
-                        _id: type._id,
-                        createdAt: Common.getDateTime(type.createdAt),
-                        updatedAt: Common.getDateTime(type.updatedAt)
-                    });
+                    if(type.typeName != '默认'){
+                        typeList.push({
+                            name: type.typeName,
+                            des: type.typeDes,
+                            _id: type._id
+                        });
+                    }
                 });
-
-                resolve({code: 0, message: '', data: typeList});
+                resolve(typeList);
             }
         });
     });
-    await ctx.render('index.jade', {type: typeList});
+    // 获取博客列表
+    let blogList = await new Promise((resolve, reject)=>{
+        Blog.find(where, null, {skip: 0, limit: 5})
+            .sort({createdAt: -1})
+            .populate('user').populate('type').exec(function (err, res) {
+                if (err) {
+                    resolve(blogList);
+                } else {
+                    let blogList = [];
+                    res.map((blog) => {
+                        blogList.push({
+                            _id: blog._id,
+                            blogTitle: blog.blogTitle,
+                            blogContent: blog.blogContent,
+                            blogDes: blog.blogDes,
+                            createdAt: Common.getDateTime(blog.createdAt).split(' ')[0],
+                            blogCover: crosImgUrl+blog.blogCover,
+                            blogType: blog.type.typeName,
+                            author: {name: blog.user.userName, head: crosImgUrl+blog.user.userHead}
+                        });
+                    });
+                    resolve({list: blogList});
+                }
+            });
+    });
+    // 统计博文的总数
+    await new Promise((resolve, reject) => {
+        Blog.count(where, function (err, res) {
+            if (err) {
+                resolve({code: 102, message: err.message});
+            } else {
+                if (blogList.list.length > 0) blogList.total = res;
+                else blogList.total = 0;
+                blogList.lastPage = Math.ceil(blogList.total / 5);
+                blogList.current = 1;
+                resolve('ok');
+            }
+        });
+    });
+
+    await ctx.render('index.jade', {type: typeList, blog: blogList});
 };
 
-// 获取文章列表
+// 异步获取文章列表，需要拼接在首页渲染了之后的页面之上
 let getBlogList = async (ctx, next) => {
+
+    const crosImgUrl = '//'+ctx.request.header.host.split(':')[0]+':10366';
+
     let page = parseInt(ctx.query.page),
         size = parseInt(ctx.query.size),
         skip = size * (page - 1);
 
     let type = ctx.query.type;
-    let where = {};
+    let where = {blogStatus: 0};
     if (type) where.type = type;
 
     let blogList = await new Promise((resolve) => {
@@ -55,11 +103,10 @@ let getBlogList = async (ctx, next) => {
                         blogTitle: blog.blogTitle,
                         blogContent: blog.blogContent,
                         blogDes: blog.blogDes,
-                        createdAt: Common.getDateTime(blog.createdAt),
-                        updatedAt: Common.getDateTime(blog.updatedAt),
-                        blogCover: blog.blogCover,
+                        createdAt: Common.getDateTime(blog.createdAt).split(' ')[0],
+                        blogCover: crosImgUrl+blog.blogCover,
                         blogType: blog.type.typeName,
-                        author: {name: blog.user.userName, head: blog.user.userHead}
+                        author: {name: blog.user.userName, head: crosImgUrl+blog.user.userHead}
                     });
                 });
                 resolve({code: 0, message: '', data: {current: page, blogList: blogList}});
@@ -81,7 +128,7 @@ let getBlogList = async (ctx, next) => {
     });
 
     ctx.response.body = blogList;
-}
+};
 
 // 渲染文章详情
 let viewBlog = async (ctx, next) => {
@@ -134,13 +181,13 @@ let viewBlog = async (ctx, next) => {
             } else {
                 let typeList = [];
                 res.map((type) => {
-                    typeList.push({
-                        name: type.typeName,
-                        des: type.typeDes,
-                        _id: type._id,
-                        createdAt: Common.getDateTime(type.createdAt),
-                        updatedAt: Common.getDateTime(type.updatedAt)
-                    });
+                    if(type.typeName != '默认'){
+                        typeList.push({
+                            name: type.typeName,
+                            des: type.typeDes,
+                            _id: type._id
+                        });
+                    }
                 });
 
                 resolve({code: 0, message: '', data: typeList});
@@ -175,5 +222,6 @@ let viewBlog = async (ctx, next) => {
 module.exports = {
     'GET /blog/list': getBlogList,
     'GET /blog/:id': viewBlog,
+    'GET /:id': viewHome,
     'GET /': viewHome,
 };

@@ -138,7 +138,6 @@ let delTypeById = async (ctx, next) => {
     ctx.response.body = removeType;
 };
 
-
 // 添加新文章
 let addBlog = async (ctx, next) => {
     let title = ctx.request.body.title,
@@ -147,6 +146,15 @@ let addBlog = async (ctx, next) => {
         des = ctx.request.body.des,
         cover = ctx.request.body.cover,
         userId = ctx.session.user.userId;
+
+    if(cover){
+        cover = cover.slice(1, cover.length);
+    }
+
+    if(!userId){
+        ctx.response.body({code: 308, message: '登录超时'});
+        return;
+    }
 
     let blog = new Blog({blogTitle: title, blogContent: content, blogDes: des, user: userId, type: typeId, blogCover: cover});
 
@@ -161,6 +169,30 @@ let addBlog = async (ctx, next) => {
     });
 
     ctx.response.body = blogRes;
+};
+
+// 修改文章内容
+let editBlog = async (ctx, next) => {
+    let title = ctx.request.body.title,
+        typeId = ctx.request.body.type,
+        content = ctx.request.body.content,
+        des = ctx.request.body.des,
+        cover = ctx.request.body.cover,
+        blogId = ctx.request.body.id;
+
+    cover = cover.splice(1, cover.length);
+
+    let blogEdit = await new Promise((resolve, reject)=>{
+        Blog.update({_id: blogId}, {$set : {blogTitle : title, type : typeId, blogContent: content, blogDes: des, blogCover: cover, blogStatus: 1}}, function (err, res) {
+            if(err){
+                reject({code: 102, message: err});
+            }else{
+                resolve({code: 0, message:'操作成功', data: {}});
+            }
+        });
+    });
+
+    ctx.response.body = blogEdit;
 };
 
 // 获取文章列表
@@ -225,7 +257,8 @@ let getBlogById = async (ctx, next)=>{
     let id = ctx.query.id;
 
     let blog = await new Promise((resolve)=>{
-        Blog.findById(id, function (err, res) {
+
+        Blog.findById(id).populate('user').populate('type').exec(function (err, res) {
             if (err) {
                 reject({code: 102, message: err});
             } else {
@@ -234,9 +267,10 @@ let getBlogById = async (ctx, next)=>{
                     blogContent: res.blogContent,
                     blogDes: res.blogDes,
                     blogTitle: res.blogTitle,
-                    blogUser: res.user,
-                    blogType: res.type,
+                    blogUser: {id: res.user._id, name: res.user.userName},
+                    blogType: {id: res.type._id, name: res.type.typeName},
                     blogPv: res.blogPv?res.blogPv:0,
+                    blogCover: res.blogCover,
                     createdAt: Common.getDateTime(res.createdAt).split(' ')[0],
                     updatedAt: Common.getDateTime(res.updatedAt).split(' ')[0]
                 };
@@ -274,5 +308,6 @@ module.exports = {
     'POST /blog/add': addBlog,
     'GET /blog/list': getBlogList,
     'GET /blog/getBlogById': getBlogById,
-    'POST /blog/blogStatus': changeBlogStatus
+    'POST /blog/blogStatus': changeBlogStatus,
+    'POST /blog/edit': editBlog
 };

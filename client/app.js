@@ -15,7 +15,7 @@ const app = new koa();
 app.keys = ['azumar'];
 app.use(bodyParser());
 app.use(views(__dirname+'/views', { map: { jade: 'jade' }}));
-app.use(koaStatic(__dirname + '/public'));
+app.use(koaStatic(__dirname + '/dist'));
 app.use(session(config.session, app));
 app.use(controllers());
 

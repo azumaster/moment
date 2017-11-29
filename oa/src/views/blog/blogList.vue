@@ -38,19 +38,32 @@
                             switch (currentStatus) {
                                 case 0:
                                     // 发布中
-                                    btns = [
-                                        h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.show(params.index);}}}, '查看'),
-                                        h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.edit(params.index);}}}, '编辑'),
-                                        h('Button', {props: {type: 'error', size: 'small'}, on: {click: () => {this.changeStatus(params.index, 1);}}}, '下架')
-                                    ];
+                                    if(this.$store.state.user.userType == 1){
+                                        btns = [
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.show(params.index);}}}, '查看'),
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.edit(params.index);}}}, '编辑'),
+                                            h('Button', {props: {type: 'error', size: 'small'}, on: {click: () => {this.changeStatus(params.index, 1);}}}, '下架')
+                                        ];
+                                    } else {
+                                        btns = [
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.show(params.index);}}}, '查看'),
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.edit(params.index);}}}, '编辑')
+                                        ];
+                                    }
                                     break;
                                 case 1:
                                     // 下架中
-                                    btns = [
-                                        h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.show(params.index);}}}, '查看'),
-                                        h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.edit(params.index);}}}, '编辑'),
-                                        h('Button', {props: {type: 'success', size: 'small'}, on: {click: () => {this.changeStatus(params.index, 0);}}}, '发布')
-                                    ];
+                                    if(this.$store.state.user.userType == 1){
+                                        btns = [
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.show(params.index);}}}, '查看'),
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.edit(params.index);}}}, '编辑'),
+                                            h('Button', {props: {type: 'success', size: 'small'}, on: {click: () => {this.changeStatus(params.index, 0);}}}, '发布')
+                                        ];
+                                    } else {
+                                        btns = [
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.show(params.index);}}}, '查看'),
+                                            h('Button', {props: {type: 'info', size: 'small'}, style: { marginRight: '5px'}, on: {click: () => {this.edit(params.index);}}}, '编辑')];
+                                    }
                                     break;
                             }
 
@@ -113,7 +126,10 @@
                 this.getBlogList();
             },
             // 编辑文章
-            edit: function () {
+            edit: function (index) {
+                // 获取到id，打开新的路由
+                let id = this.blogList[index]._id;
+                window.location.href = '/#/blogList/editBlog/'+id;
             },
             // 查看文章
             show: function (index) {
@@ -157,9 +173,6 @@
                             _this.$Message.error('小Mo开小差去了，请稍后再试~');
                             _this.$Modal.remove();
                         });
-                    },
-                    onCancel: function () {
-                        _this.$Modal.remove();
                     }
                 });
             }

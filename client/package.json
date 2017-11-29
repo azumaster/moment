@@ -17,5 +17,6 @@
     "koa-static": "^4.0.1",
     "koa-views": "^6.1.0",
     "mongoose": "^4.11.13"
-  }
+  },
+  "devDependencies": {}
 }

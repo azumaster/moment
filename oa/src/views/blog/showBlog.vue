@@ -1,11 +1,18 @@
 <template>
     <div id="showBlog">
         <pageHead :title="blog.blogTitle" isBack="true"></pageHead>
-        <div id="blogContent" class="blog-content" v-html="blog.blogContent"></div>
+        <div class="blog-assets">
+            <p><Icon type="person"></Icon>{{blog.blogUser.name}}</p> |
+            <p><Icon type="ios-keypad"></Icon>{{blog.blogType.name}}</p> |
+            <p><Icon type="ios-calendar-outline"></Icon>{{blog.createdAt}}</p> |
+            <p><Icon type="ios-eye"></Icon>{{blog.blogPv}}</p>
+        </div>
+        <div id="blogContent" class="blog-content markdown-body" v-html="blog.marked"></div>
     </div>
 </template>
 
 <script>
+    import Marked from 'marked';
     import PageHead from './../../components/page/pageHead.vue';
 
     export default {
@@ -14,7 +21,7 @@
         data: function () {
             return {
                 blogId: '',
-                blog: {}
+                blog: { blogUser: {}, blogType: {}}
             };
         },
         methods: {
@@ -29,6 +36,11 @@
                 }).then(function (res) {
                     if(res.data.code == 0){
                         let blog = res.data.data;
+                        let blogStr = blog.blogContent;
+                        blogStr = blogStr.replace(/&amp;gt;/g, '>');
+                        blogStr = blogStr.replace(/&amp;lt;/g, '< ');
+
+                        blog.marked = Marked(blogStr);
 
                         _this.blog = blog;
                         _this.$Loading.finish();
@@ -48,3 +60,5 @@
         }
     };
 </script>
+
+<style scoped>@import '~github-markdown-css';</style>
