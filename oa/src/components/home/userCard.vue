@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Card>
+        <Card dis-hover="true" style="height: 185px;">
             <p slot="title">我</p>
             <a href="#" slot="extra" @click="showEditModal"><Icon style="margin-right: 5px;" type="edit"></Icon>编辑资料</a>
             <div class="home-card">

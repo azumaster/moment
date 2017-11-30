@@ -1,25 +1,26 @@
 .home-row{
   margin: 20px 0;
-  .home-card {
-    display: flex;
-    justify-content: space-between;
-    .home-card-head{
-      margin-right: 10px;
-      img{
-        width: 100px;
-        height: 100px;
-        display: block;
-      }
+}
+
+.home-card {
+  display: flex;
+  justify-content: space-between;
+  .home-card-head{
+    margin-right: 10px;
+    img{
+      width: 100px;
+      height: 100px;
+      display: block;
     }
-    .home-card-info {
-      width: 100%;
-      margin-left: 10px;
-      h1{
-        line-height: 50px;
-      }
-      p{
-        line-height: 25px;
-      }
+  }
+  .home-card-info {
+    width: 100%;
+    margin-left: 10px;
+    h1{
+      line-height: 50px;
+    }
+    p{
+      line-height: 25px;
     }
   }
 }
@@ -32,5 +33,50 @@
     width: 100px;
     height: 100px;
     display: block;
+  }
+}
+
+.weather-card {
+  display: flex;
+  height: 185px;
+  .weather-temp{
+    flex: 1;
+    background: lightblue;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center right;
+    border-radius: 4px 0 0 4px;
+    span {
+      font-size: 30px;
+      position: absolute;
+      right: 0;
+      bottom: 16px;
+    }
+  }
+  .weather-info {
+    flex: 3;
+    .weather-title{
+      height: 40px;
+      line-height: 40px;
+      border-bottom: 1px solid #dddee1;
+      padding: 0 10px;
+      font-weight: 700;
+      i{
+        margin-right: 10px;
+        font-size: 20px;
+      }
+    }
+    .weather-body{
+      padding: 16px;
+      .weather-city{
+        font-size: 16px;
+      }
+      .weather-date {
+        font-size: 12px;
+        color: #bbbec4;
+        margin-bottom: 5px;
+      }
+    }
   }
 }

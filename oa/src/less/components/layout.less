@@ -1,12 +1,15 @@
 .moment{
-  border: 1px solid @color-border;
+  border: none;
   background: @color-bg;
+  overflow: hidden;
   .moment-header{
     display: flex;
     justify-content: space-between;
     height: 60px;
     background: @color-content;
-    position: relative;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
     padding: 0 20px;
     .header-logo{
       height: 30px;
@@ -60,6 +63,7 @@
     overflow: hidden;
     background: #fff;
     border-radius: 4px;
+    padding: 60px 0 20px 0;
     .moment-page{
       margin: 20px 10px 0 0;
     }
