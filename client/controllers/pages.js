@@ -32,13 +32,15 @@ let viewHome = async (ctx, next) => {
             }
         });
     });
+
+
     // 获取博客列表
     let blogList = await new Promise((resolve, reject)=>{
         Blog.find(where, null, {skip: 0, limit: 5})
             .sort({createdAt: -1})
             .populate('user').populate('type').exec(function (err, res) {
                 if (err) {
-                    resolve(blogList);
+                    resolve(err);
                 } else {
                     let blogList = [];
                     res.map((blog) => {

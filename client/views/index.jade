@@ -10,6 +10,7 @@ html
         link(rel="stylesheet", href='/css/style.css')
         link(rel="short icon", href='/img/favicon.ico')
     body
+        include components/bg
         include components/header
 
         main.page-main
@@ -41,9 +42,9 @@ html
                                         a(href="/blog/#{b._id}") 点此查看全文
                                             span.icon.right
                     - if(blog.lastPage > 1)
-                        div.loading#loading
+                        div(onclick="loadMore(this);", data-current="#{blog.current}", data-lastPage="#{blog.lastPage}").loading#loading
                             i.icon.circle
-                            span(onclick="loadMore(this);", data-current="#{blog.current}", data-lastPage="#{blog.lastPage}") 点击加载更多
+                            span 点击加载更多
                 - else
                     div.left-no
                         div.left-no-word
@@ -71,6 +72,7 @@ html
         include components/up
 
     script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js")
     script(src="/js/common.js")
     script.
         // 根据分类id加载内容
@@ -96,7 +98,7 @@ html
                     if (res.code == 0) {
                         // 设置Loading按钮
                         if (res.data.current == res.data.lastPage) {
-                            $(obj).parent().hide();
+                            $(obj).hide();
                         }
                         $(obj).attr({'data-current': res.data.current, 'data-lastPage': res.data.lastPage});
 
@@ -122,14 +124,13 @@ html
                     } else {
 
                     }
-                    $(obj).parent().removeClass('active');
+                    $(obj).removeClass('active');
                 },
                 error: function (err) {
                     console.log(err.status + '： ' + err.statusText);
-                    $(obj).parent().removeClass('active');
+                    $(obj).removeClass('active');
                 }
             });
-
         }
 
         (function () {

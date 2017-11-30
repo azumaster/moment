@@ -1,0 +1,40 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title 红西柚
+        //meta(name="keywords", content="前端,红西柚,html5,react,javascript,js,es,vue,doden,azumar")
+        //meta(name="author", content="#{blog.data.blogUser}")
+        //meta(name="description", content="#{blog.data.blogDes}")
+        include quote/viewport
+        link(rel="stylesheet", href='/css/reset.css')
+        link(rel="stylesheet", href='/css/style.css')
+        link(rel="short icon", href='/img/favicon.ico')
+    body
+        include components/bg
+        include components/header
+
+        main.page-main
+            section#pageLeft.page-left
+                div.page-filter
+                div.page-bookshelf
+
+            section.page-right
+                include components/about
+
+        include components/footer
+        include components/up
+
+    script(src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js")
+    script(src="/js/common.js")
+    script.
+        (function () {
+            initView();
+        })();
+
+        // 初始化View
+        function initView() {
+            $('#pageLeft').css({'min-height': (window.innerHeight - 280) + 'px'});
+            $('#headerNav').find('li').eq(1).addClass('active').removeClass('hide');
+        }
