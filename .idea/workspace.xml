@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7087b49c-5984-49c7-b3d8-28793a98e675" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/oa/src/components/home/weather.vue" afterPath="$PROJECT_DIR$/oa/src/components/home/weather.vue" />
-    </list>
+    <list default="true" id="7087b49c-5984-49c7-b3d8-28793a98e675" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -52,8 +49,8 @@
       <file leaf-file-name="weather.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/oa/src/components/home/weather.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="27" column="71" lean-forward="true" selection-start-line="27" selection-start-column="71" selection-end-line="27" selection-end-column="71" />
+            <state relative-caret-position="441">
+              <caret line="21" column="20" lean-forward="true" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
               <folding>
                 <element signature="n#style#0;n#Card#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="e#1525#1863#0" expanded="false" />
@@ -403,12 +400,12 @@
       <workItem from="1511952312679" duration="2520000" />
       <workItem from="1512003477414" duration="12571000" />
       <workItem from="1512025387333" duration="15244000" />
-      <workItem from="1512090030617" duration="9166000" />
+      <workItem from="1512090030617" duration="11165000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="282664000" />
+    <option name="totallyTimeSpent" value="284663000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -812,8 +809,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/oa/src/components/home/weather.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="27" column="71" lean-forward="true" selection-start-line="27" selection-start-column="71" selection-end-line="27" selection-end-column="71" />
+        <state relative-caret-position="441">
+          <caret line="21" column="20" lean-forward="true" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
           <folding>
             <element signature="n#style#0;n#Card#0;n#template#0;n#!!top" expanded="true" />
             <element signature="e#1525#1863#0" expanded="false" />
