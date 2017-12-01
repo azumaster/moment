@@ -25,7 +25,7 @@
             return {
                 weatherInfo: {},
                 isDay: true,
-                weatherBg: 'background-image: url(\'/dist/img/bg.jpg\');'
+                weatherBg: 'background-image: url("/dist/img/bg.jpg");'
             };
         },
         methods: {
