@@ -144,7 +144,7 @@
                     content: '确定离开本页面，放弃已编辑好的文章？',
                     okText: '取消修改',
                     onOk: function () {
-                        window.location.href = '/#/blogList';
+                        window.location.href = '/#/blog';
                     }
                 });
             },
@@ -175,7 +175,7 @@
                         }).then(function (res) {
                             if(res.data.code == 0){
                                 _this.$Message.success('您已修改了本篇文章~');
-                                window.location.href = '/#/blogList';
+                                window.location.href = '/#/blog';
                             }else{
                                 _this.$Message.error(res.data.message);
                             }

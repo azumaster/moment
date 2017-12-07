@@ -15,7 +15,7 @@ html
         include components/bg
         include components/header
 
-        main.page-main
+        main#pageMain.page-main
             section#pageLeft.page-left
                 div.blog-inner
                     div.blog-title
@@ -30,7 +30,7 @@ html
                                 span #{blog.data.blogUser}
                             span
                                 i.icon.category
-                                span #{blog.data.blogType}
+                                span #{blog.data.blogTypeName}
                     div.blog-content.markdown-body#blogContent #{blog.data.blogContent}
                     div.blog-content-end （完）
                     div.blog-oper
@@ -50,6 +50,8 @@ html
                                 span #{t.name}
                                 span.icon.right
 
+        include components/pageLoading
+
         include components/footer
         include components/up
 
@@ -60,8 +62,6 @@ html
     script.
       (function () {
           translateHtml();
-          initView();
-          $('#headerNav').find('li').eq(0).addClass('active');
       })();
 
 
@@ -74,13 +74,8 @@ html
         dom.innerHTML = htmlStr;
       }
 
-      // 初始化View
-      function initView() {
-          $('#pageLeft').css({'min-height': (window.innerHeight - 280) + 'px'});
-      }
-
       function loadCategory(obj) {
           var id = '';
           if (obj) id = $(obj).find('.typeId').html();
-          window.location.href = '/' + id;
+          window.location.href = '/blogList/' + id;
       }

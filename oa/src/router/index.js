@@ -25,7 +25,7 @@ export default new Router({
         {path: '/userList', component: User, children: [
             {path: '', component: UserList, name: 'userList'}, {path: 'editMe', component: EditMe, name: 'editMe'}
         ]},
-        {path: '/blogList', component: Blog, children: [
+        {path: '/blog', component: Blog, children: [
             {path: '', component: BlogList, name: 'blogList'}, {path: 'addBlog', component: AddBlog, name: 'addBlog'},
             {path: 'showBlog/:id', component: ShowBlog, name: 'showBlog'}, {path: 'editBlog/:id', component: EditBlog, name: 'editBlog'}
         ]},

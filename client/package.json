@@ -18,5 +18,8 @@
     "koa-views": "^6.1.0",
     "mongoose": "^4.11.13"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^3.0.0"
+  }
 }

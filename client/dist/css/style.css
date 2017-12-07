@@ -32,8 +32,17 @@ body { margin: 0; height: 0; background: #f5f5f5; font-family: "Helvetica Neue",
 
 .page-main { display: none; width: 1200px; margin: 10px auto 0; }
 .page-main .page-left { flex: 3; margin-right: 20px; overflow: hidden; }
+.page-main .page-left .left-title { margin: 20px 0; font-size: 30px; font-weight: bold; color: #333333; line-height: 40px; letter-spacing: 5px; }
 .page-main .page-left .blog-inner { background: #ffffff; box-shadow: 0 0 5px #c0c0c0; margin-bottom: 40px; overflow: hidden; }
 .page-main .page-right { flex: 1; margin-left: 20px; overflow: hidden; }
+
+@keyframes bounce { 0%, 100% { transform: scale(0.0);  -webkit-transform: scale(0.0); } 50% { transform: scale(1.0); -webkit-transform: scale(1.0); } }
+
+.page-loading { display: block; width: 1200px; margin: 10px auto 0; position: relative; overflow: hidden;}
+.page-loading .spinner { width: 100px; height: 100px; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; }
+.page-loading .spinner .outer-bounce {  }
+.page-loading .spinner .outer-bounce, .page-loading .spinner .inner-bounce { width: 100%; height: 100%; border-radius: 50%; background-color: #e75411; opacity: 0.6; position: absolute; top: 0; left: 0; animation: bounce 2.0s infinite ease-in-out; }
+.page-loading .spinner .inner-bounce { -webkit-animation-delay: -1.0s; animation-delay: -1.0s; }
 
 .page-footer { height: 100px; background: #aaaaaa; margin-top: 50px; }
 .page-footer nav { width: 1200px; margin: 0 auto; display: flex; line-height: 100px; justify-content: space-between; }
@@ -57,6 +66,7 @@ body { margin: 0; height: 0; background: #f5f5f5; font-family: "Helvetica Neue",
 .right-item .item-title h3 { font-weight: bold; font-size: 16px; color: #e75411 }
 .right-item .item-list { list-style: none; margin: 0 10px 0 25px; padding: 0; }
 .right-item .item-list li:hover { color: #e75411; transition: color .2s linear; }
+.right-item .item-list li.active { color: #e75411; transition: color .2s linear; }
 .right-item .item-list li { cursor: pointer; height: 40px; line-height: 40px; font-size: 13px; color: #666666; display: flex; justify-content: space-between; transition: color .2s linear; }
 .right-item .item-list li:not(:last-child) { border-bottom: 1px dashed #999999; }
 .right-item .item-list li .typeId {display: none}

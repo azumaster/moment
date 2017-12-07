@@ -11,6 +11,7 @@
     toTop();
 
 })();
+
 // 回到顶部
 function toTop() {
     $(window).scroll(function(){
@@ -21,4 +22,23 @@ function toTop() {
     $('#pageUp').click(function () {
         $('body,html').animate({scrollTop:0},800);
     });
+}
+
+// Dom准备好
+$(document).ready(function () {
+    $('#pageLeft, #pageLoading').css({'min-height': (window.innerHeight - 280) + 'px'});
+    $('#headerNav').find('li').eq(0).addClass('active');
+})
+
+// 数据加载完毕
+window.onload = function () {
+
+    setTimeout(function () {
+        $('.page-loading').fadeOut();
+        $('.page-main').fadeIn().css({'display': 'flex'});
+        // $('.page-loading').css({'display': 'none'});
+        // $('.page-main').css({'display': 'flex'});
+        window.scrollTo(0, 0);
+    }, 1000)
+
 }
