@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 const Home = resolve => require.ensure([], () => {return resolve(require('./../views/home/home.vue'));}, 'home');
+const HomePage = resolve => require.ensure([], () => {return resolve(require('./../views/home/homePage.vue'));}, 'home');
 const EditMe = resolve => require.ensure([], () => {return resolve(require('./../views/home/editUser.vue'));}, 'home');
 
 const User = resolve => require.ensure([], () => {return resolve(require('./../views/user/user.vue'));}, 'user');
@@ -20,17 +21,18 @@ Vue.use(Router);
 
 export default new Router({
     routes: [
-        {path: '/', component: Home, name: 'home'},
-        {path: '/home', redirect: '/'},
-        {path: '/userList', component: User, children: [
-            {path: '', component: UserList, name: 'userList'}, {path: 'editMe', component: EditMe, name: 'editMe'}
+        {path: '/', component: Home, children: [
+            {path: '', component: HomePage, name: 'home'}, {path: 'editMe', component: EditMe, name: 'editMe'}
         ]},
-        {path: '/blog', component: Blog, children: [
+        {path: '/userList', component: User, children: [
+            {path: '', component: UserList, name: 'userList'}
+        ]},
+        {path: '/blogList', component: Blog, children: [
             {path: '', component: BlogList, name: 'blogList'}, {path: 'addBlog', component: AddBlog, name: 'addBlog'},
             {path: 'showBlog/:id', component: ShowBlog, name: 'showBlog'}, {path: 'editBlog/:id', component: EditBlog, name: 'editBlog'}
         ]},
         {path: '/blogType', component: Type, children: [
-            {path: '', component: TypeList, name: 'typeList'}
+            {path: '', component: TypeList, name: 'blogType'}
         ]}
     ]
 });

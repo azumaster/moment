@@ -32,7 +32,7 @@
         },
         methods: {
             changeMenu: function (name) {
-                window.location.href = '/#/'+name;
+                this.$router.push({name: name});
             }
         },
         mounted: function () {

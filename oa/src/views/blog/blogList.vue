@@ -118,7 +118,7 @@
             },
             // 添加新文章
             addBlog: function () {
-                window.location.href = '/#/blog/addBlog';
+                window.location.href = '/#/blogList/addBlog';
             },
             // 改变分页
             changePage: function (page) {
@@ -129,12 +129,12 @@
             edit: function (index) {
                 // 获取到id，打开新的路由
                 let id = this.blogList[index]._id;
-                window.location.href = '/#/blog/editBlog/'+id;
+                window.location.href = '/#/blogList/editBlog/'+id;
             },
             // 查看文章
             show: function (index) {
                 let id = this.blogList[index]._id;
-                this.$router.push('/blog/showBlog/'+id);
+                this.$router.push('/blogList/showBlog/'+id);
             },
             // 改变文章状态
             changeStatus: function (index, status) {

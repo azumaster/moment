@@ -61,9 +61,9 @@ html
     script(src="/js/common.js")
     script.
       (function () {
+          $('#headerNav').find('li').eq(0).addClass('active');
           translateHtml();
       })();
-
 
       // 解析MarkDown
       function translateHtml () {

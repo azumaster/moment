@@ -18,9 +18,14 @@ html
             section#pageLeft.page-left
                 div.page-filter
                 div.page-bookshelf
+                    div.book
+                        div.book-img
+                            img(src="")
 
             section.page-right
                 include components/about
+
+        include components/pageLoading
 
         include components/footer
         include components/up
@@ -30,11 +35,5 @@ html
     script(src="/js/common.js")
     script.
         (function () {
-            initView();
-        })();
-
-        // 初始化View
-        function initView() {
-            $('#pageLeft').css({'min-height': (window.innerHeight - 280) + 'px'});
             $('#headerNav').find('li').eq(1).addClass('active').removeClass('hide');
-        }
+        })();

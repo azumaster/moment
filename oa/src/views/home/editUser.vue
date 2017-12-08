@@ -1,6 +1,6 @@
 <template>
     <div id="editUser">
-        <PageHead title="修改您的资料"></PageHead>
+        <PageHead title="修改你的资料" isBack="true"></PageHead>
     </div>
 </template>
 

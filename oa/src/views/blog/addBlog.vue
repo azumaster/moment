@@ -38,6 +38,9 @@
                             <img :src="imgUrl">
                         </div>
                     </Card>
+                    <Card>
+                        <croppa v-model="croppaImg"></croppa>
+                    </Card>
                 </i-col>
             </Row>
 
@@ -70,7 +73,8 @@
                 },
                 imgUrl: '/dist/img/blogCover/default.jpg',
                 simple: '',
-                typeList: ''
+                typeList: '',
+                croppaImg: {}
             };
         },
         methods: {
