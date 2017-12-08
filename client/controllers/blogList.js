@@ -145,6 +145,6 @@ let getBlogList = async (ctx, next) => {
 
 module.exports = {
     'GET /blogList': viewBlogList,
-    'GET /blogList/:id': viewBlogList,
-    'GET /blogList/list': getBlogList
+    'GET /blogList/list': getBlogList,
+    'GET /blogList/:id': viewBlogList
 };

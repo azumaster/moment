@@ -42,10 +42,10 @@ html
                                     div.blog-oper
                                         a(href="/blog/#{b._id}") 点此查看全文
                                             span.icon.right
-                - if(blog.lastPage > 1)
-                    div(onclick="loadMore(this);", data-current="#{blog.current}", data-lastPage="#{blog.lastPage}").loading#loading
-                        i.icon.circle
-                        span 点击加载更多
+                    - if(blog.lastPage > 1)
+                        div(onclick="loadMore(this);", data-current="#{blog.current}", data-lastPage="#{blog.lastPage}").loading#loading
+                            i.icon.circle
+                            span 点击加载更多
                 - else
                     div.left-no
                         div.left-no-word
@@ -89,7 +89,7 @@ html
         // 加载更多数据
         function loadMore(obj) {
             var current = $(obj).attr('data-current'),
-                type = window.location.pathname.split('/')[1];
+                type = window.location.pathname.split('/')[2];
 
             current++;
             var data = {page: current, size: 5, type: type};
@@ -99,6 +99,7 @@ html
                 type: 'get',
                 data: data,
                 success: function (res) {
+
                     if (res.code == 0) {
                         // 设置Loading按钮
                         if (res.data.current == res.data.lastPage) {
@@ -107,7 +108,7 @@ html
                         $(obj).attr({'data-current': res.data.current, 'data-lastPage': res.data.lastPage});
 
                         // 追加节点Node
-                        var oldNode = $('#blog').html(),
+                        var oldNode = $('#blogList').html(),
                             list = '';
                         for (var index = 0; index < res.data.blogList.length; index++) {
                             var item = res.data.blogList[index];
@@ -124,7 +125,8 @@ html
                         }
 
                         oldNode += list;
-                        $('#blog').html(oldNode);
+
+                        $('#blogList').html(oldNode);
                     } else {
 
                     }
